@@ -36,7 +36,7 @@
             <TextBox x:Name="StartTextBox" Height="30" Margin="0,0,0,10"/>
 
             <TextBlock Text="Destination" />
-            <TextBox x:Name="EndTextBox" Height="30" Margin="0,0,0,10"/>
+            <TextBox x:Name="DestinationTextBox" Height="30" Margin="0,0,0,10"/>
 
             <Button Content="Get Itinerary" Background="#2D2D33" Foreground="White" FontWeight="Bold" Height="40"
                     HorizontalAlignment="Left" Width="150" Click="GetItinerary_Click"/>
