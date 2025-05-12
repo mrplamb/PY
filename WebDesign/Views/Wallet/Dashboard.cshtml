@@ -1,0 +1,24 @@
+﻿@page
+@model HolidayManagerWeb.Models.DashboardModel
+@{
+    <h2>Wallet Dashboard</h2>
+    <p>Balance: <strong>$@Model.WalletBalance</strong></p>
+    <a href="/Wallet/AddFunds?userId=@Model.UserId">Top up via PayPal</a>
+
+    <h3>Transactions</h3>
+    <table>
+        <thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Description</th></tr></thead>
+        <tbody>
+            @foreach (var t in Model.Transactions)
+            {
+                <tr>
+                    <td>@t.Timestamp.ToShortDateString()</td>
+                    <td>@t.Type</td>
+                    <td>@(t.Type == "Credit" ? "+" : "-")@t.Amount</td>
+                    <td>@t.Description</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}

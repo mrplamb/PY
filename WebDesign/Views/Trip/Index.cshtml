@@ -1,0 +1,23 @@
+﻿@page
+@model List<HolidayManagerWeb.Models.Trip>
+@{
+    <h2>My Trips</h2>
+    <a href="/Trip/Create?userId=@ViewBag.UserId">Plan New Trip</a>
+    <table>
+        <thead>
+            <tr><th>Destination</th><th>Dates</th><th>Status</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+            @foreach (var t in Model)
+            {
+                <tr>
+                    <td>@t.Destination</td>
+                    <td>@t.StartDate to @t.EndDate</td>
+                    <td>@(t.IsPaid ? "Paid ✅" : "Unpaid ❌")</td>
+                    <td><a href="/Trip/Details/@t.TripId">View</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}

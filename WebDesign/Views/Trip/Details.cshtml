@@ -1,0 +1,17 @@
+﻿@model HolidayManagerWeb.Models.Trip
+
+<h2>Trip Details</h2>
+<p><strong>Destination:</strong> @Model.Destination</p>
+<p><strong>Dates:</strong> @Model.StartDate to @Model.EndDate</p>
+<p><strong>Budget:</strong> $@Model.Budget</p>
+<p><strong>Status:</strong> @(Model.IsPaid ? "Paid ✅" : "Unpaid ❌")</p>
+
+@if (!Model.IsPaid)
+{
+    <form method="post" action="/Trip/PayForTrip">
+        <input type="hidden" name="tripId" value="@Model.TripId" />
+        <input type="hidden" name="userId" value="@Model.UserId" />
+        <button type="submit">Pay Now from Wallet</button>
+    </form>
+}
+

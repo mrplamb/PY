@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PY Travel - Sign Up</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+
+    .left {
+      background-color: #2d2d33;
+      color: white;
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+
+    .left .logo-placeholder {
+      background-color: #ccc;
+      width: 300px;
+      height: 300px;
+      margin-bottom: 30px;
+    }
+
+    .left h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .left p {
+      margin-top: 10px;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    .right {
+      background-color: #eeeeee;
+      width: 50%;
+      padding: 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .right h2 {
+      font-size: 28px;
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-top: 20px;
+      margin-bottom: 8px;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .button {
+      margin-top: 20px;
+      background-color: #1d1d1d;
+      color: white;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .button:hover {
+      background-color: #333;
+    }
+
+    .link {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #333;
+      text-align: center;
+    }
+
+    .logo-top-right {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #ccc;
+      width: 50px;
+      height: 50px;
+      border-radius: 10px;
+      text-align: center;
+      line-height: 50px;
+      font-weight: bold;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo-top-right">Logo</div>
+  <div class="container">
+    <div class="left">
+      <div class="logo-placeholder"></div>
+      <h1>PY Travel</h1>
+      <p>All your trips, documents, <br />budgets in one place.</p>
+    </div>
+    <div class="right">
+      <h2>Sign up</h2>
+      <form onsubmit="event.preventDefault(); alert('Sign-up clicked');">
+        <label for="email">Email address</label>
+        <input type="email" id="email" placeholder="example@email.com" required />
+        
+        <label for="password">Password</label>
+        <input type="password" id="password" required />
+
+        <button class="button" type="submit">Sign up</button>
+        <button class="button" type="button" onclick="alert('Log in clicked')">Log in</button>
+      </form>
+      <div class="link">
+        <a href="#">Forgot your password?</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
