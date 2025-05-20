@@ -19,12 +19,15 @@ namespace HolidayManagerWeb
         public DbSet<Transaction> Transactions { get; set; }
 
 
+        public AppDbContext() { }
 
-        /*protected override void OnConfiguring(DbContextOptionsBuilder options)
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             var connectionString = "server=localhost;database=holidaymanager;user=root;password=;";
             options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-        }*/
+        }
+
+
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)

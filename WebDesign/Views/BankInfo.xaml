@@ -1,0 +1,53 @@
+<Window x:Class="Final.BankInfo"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Finance" Height="600" Width="1000">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Sidebar -->
+        <StackPanel Background="#f0f0f3" Grid.Column="0">
+            <TextBlock Text="Menu" FontSize="20" FontWeight="Bold" Margin="10"/>
+            <Button Content="My Account" Margin="10" />
+            <Button Content="Trips" Margin="10"/>
+            <Button Content="Finance" Margin="10"/>
+            <Button Content="My Documents" Margin="10"/>
+            <Button Content="Dashboarding" Margin="10"/>
+            <Button Content="Settings" Margin="10"/>
+            <Button Content="Log out" Margin="10"/>
+        </StackPanel>
+
+        <!-- Main Content -->
+        <StackPanel Grid.Column="1" Margin="20">
+            <!-- Header -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Ellipse Width="30" Height="30" Fill="Gray"/>
+                <TextBlock Text="Yasmine Bouanane" Margin="10,0,0,0" VerticalAlignment="Center" FontWeight="Bold"/>
+            </StackPanel>
+
+            <TextBlock Text="Finance Details" FontSize="24" FontWeight="Bold" Margin="0,20,0,10"/>
+            <TextBlock Text="Please provide your bank information below." FontSize="14" Foreground="Gray" Margin="0,0,0,20"/>
+
+            <!-- Input Fields -->
+            <StackPanel>
+                <TextBlock Text="Full Name" />
+                <TextBox x:Name="FullNameTextBox" Height="30" Margin="0,0,0,10" TextChanged="FullNameTextBox_TextChanged"/>
+
+                <TextBlock Text="IBAN" />
+                <TextBox x:Name="IbanTextBox" Height="30" Margin="0,0,0,10" TextChanged="IbanTextBox_TextChanged"/>
+
+                <TextBlock Text="BIC" />
+                <TextBox x:Name="BicTextBox" Height="30" Margin="0,0,0,10" TextChanged="BicTextBox_TextChanged"/>
+
+                <TextBlock Text="Bank Name" />
+                <TextBox x:Name="BankNameTextBox" Height="30" Margin="0,0,0,20" TextChanged="BankNameTextBox_TextChanged"/>
+
+                <Button Content="Save Details" Background="#2D2D33" Foreground="White" FontWeight="Bold" Height="40"
+                        HorizontalAlignment="Left" Width="150" Click="SaveButton_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
