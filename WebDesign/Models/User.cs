@@ -12,6 +12,8 @@ namespace HolidayManagerWeb.Models
     {
         //private Data data = new Data();
 
+        public User() { }
+
         public ICollection<Trip> Trips { get; set; } = new List<Trip>();
 
 

@@ -13,6 +13,8 @@ namespace HolidayManagerWeb.Models
     {
         //private Data data = new Data();
 
+        public Admin() { }
+
         public Admin(string name, string email, string password, DateOnly birth)
         {
             Name = name;

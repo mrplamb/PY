@@ -23,7 +23,7 @@ namespace HolidayManagerWeb
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            var connectionString = "server=localhost;database=holidaymanager;user=root;password=;";
+            var connectionString = "server=localhost;port=3306;database=holidaymanager;user=root;password=root;";
             options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
         }
 
