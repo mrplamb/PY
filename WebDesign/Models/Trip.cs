@@ -8,6 +8,7 @@ namespace HolidayManagerWeb.Models
 {
     public class Trip
     {
+
         [Key]
         public int TripId { get; set; }
 

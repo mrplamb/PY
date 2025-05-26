@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <None Remove="Image.jpeg" />
+    <None Remove="Views\Profile_picture.jpeg" />
     <None Remove="Views\SlideShow1.jpeg" />
     <None Remove="Views\SlideShow2.jpeg" />
     <None Remove="Views\SLideShow3.jpeg" />
@@ -37,6 +38,9 @@
 	
 	<ItemGroup>
 	  <Resource Include="Views\Image.jpeg" />
+	  <Resource Include="Views\Profile_picture.jpeg">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
 	  <Resource Include="Views\SlideShow1.jpeg" />
 	  <Resource Include="Views\SlideShow2.jpeg" />
 	  <Resource Include="Views\SLideShow3.jpeg" />

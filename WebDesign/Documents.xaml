@@ -1,17 +1,67 @@
 ﻿<Window x:Class="Final.UploadDocumentPage"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="My Documents" Height="600" Width="800">
-    <Grid Margin="10">
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="My Documents" Height="600" Width="1000">
+    <Window.Resources>
+        <DataTemplate x:Key="DocumentItemTemplate">
+            <Border BorderBrush="#DDDDDD" BorderThickness="1" CornerRadius="5" Margin="5" Padding="10" Background="White">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="📄" FontSize="24" VerticalAlignment="Center" Margin="0,0,10,0"/>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding FileName}" FontWeight="Bold" FontSize="14"/>
+                        <TextBlock Text="{Binding FileType}" FontSize="11" Foreground="Gray"/>
+                    </StackPanel>
+
+                    <TextBlock Grid.Column="2" Text="{Binding DocumentType}" VerticalAlignment="Center" Margin="10,0" FontSize="12" FontStyle="Italic"/>
+
+                    <TextBlock Grid.Column="3" Text="{Binding UploadDate, StringFormat='Uploaded: {0:yyyy-MM-dd}'}"
+                               VerticalAlignment="Center" Margin="10,0" FontSize="11" Foreground="Gray"/>
+
+                    <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Content="View" Margin="5,0" Padding="8,4" Click="ViewDocument_Click"
+                                Tag="{Binding FilePath}" />
+                        <Button Content="Delete" Margin="5,0" Padding="8,4" Click="DeleteDocument_Click"
+                                Tag="{Binding DocumentId}" Style="{StaticResource DestructiveButtonStyle}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#007ACC"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style x:Key="DestructiveButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#DC3545"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
-            <!-- Sidebar -->
             <ColumnDefinition Width="*"/>
-            <!-- Main Content -->
         </Grid.ColumnDefinitions>
 
-        <!-- Sidebar Menu -->
-        <StackPanel Background="White" Grid.Column="0" VerticalAlignment="Stretch">
+        <StackPanel Background="#f0f0f3" Grid.Column="0" VerticalAlignment="Stretch">
             <TextBlock Text="Menu " FontSize="20" FontWeight="Bold" Margin="10"/>
             <Button Content="👤 My Account" Margin="10" HorizontalAlignment="Left" Click="MyAccount_Click"/>
             <Button Content="✈️ Trips" Margin="10" HorizontalAlignment="Left" Click="Trips_Click"/>
@@ -24,19 +74,62 @@
             </StackPanel>
         </StackPanel>
 
-        <!-- Main Content -->
-        <StackPanel Grid.Column="1" Margin="20">
-            <TextBlock Text="My Documents" FontSize="24" FontWeight="Bold"/>
-            <TextBlock Text="All Documents" Margin="0,10,0,20" FontSize="16"/>
-            <StackPanel Orientation="Horizontal" Height="67" RenderTransformOrigin="0.505,0.496">
-                <TextBox x:Name="NewDocumentTextBox" Width="200" Height="30" Margin="0,0,10,0" />
-                <Button Content="Add Document" Width="120" Height="30" Click="AddDocument_Click"/>
+        <ScrollViewer Grid.Column="1" Margin="20">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,20">
+                    <Ellipse Width="30" Height="30" >
+                        <Ellipse.Fill>
+                            <ImageBrush x:Name="HeaderProfileImage" ImageSource="pack://application:,,,/Views/Profile_picture.jpeg"/>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <TextBlock x:Name="HeaderUserNameTextBlock" Text="User Name" Margin="10,0,0,0" VerticalAlignment="Center" FontWeight="Bold"/>
+                </StackPanel>
+
+                <TextBlock Text="My Documents" FontSize="24" FontWeight="Bold" Margin="0,0,0,10"/>
+
+                <Border BorderBrush="#DDDDDD" BorderThickness="1" CornerRadius="5" Padding="15" Margin="0,0,0,20" Background="#F8F8F8">
+                    <StackPanel>
+                        <TextBlock Text="Upload New Document" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <TextBlock Text="Select Trip:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <ComboBox x:Name="TripComboBox" Width="200" DisplayMemberPath="Name" SelectedValuePath="ID" SelectionChanged="TripComboBox_SelectionChanged"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <TextBlock Text="Document Type:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <ComboBox x:Name="DocumentTypeComboBox" Width="200" SelectedValuePath="Content">
+                                <ComboBoxItem Content="General" IsSelected="True"/>
+                                <ComboBoxItem Content="Passport"/>
+                                <ComboBoxItem Content="Visa"/>
+                                <ComboBoxItem Content="Ticket"/>
+                                <ComboBoxItem Content="Insurance"/>
+                                <ComboBoxItem Content="Accommodation"/>
+                                <ComboBoxItem Content="Medical"/>
+                                <ComboBoxItem Content="Other"/>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="No file chosen" x:Name="FileNameTextBlock" Margin="0,0,10,0" VerticalAlignment="Center" FontStyle="Italic" Foreground="Gray"/>
+                            <Button Content="Browse..." Click="BrowseDocument_Click" Padding="10,5"/>
+                            <Button Content="Upload Document" Click="UploadDocument_Click" Margin="10,0,0,0" Padding="10,5"
+                                    Style="{StaticResource ActionButtonStyle}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <TextBlock Text="All Documents" Margin="0,10,0,10" FontSize="16" FontWeight="SemiBold"/>
+
+                <ItemsControl x:Name="DocumentsList" ItemTemplate="{StaticResource DocumentItemTemplate}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+
             </StackPanel>
-
-            <!-- Add New Document -->
-
-            <!-- Dynamic Document Buttons -->
-            <StackPanel x:Name="DocumentsPanel" VerticalAlignment="Top" />
-        </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Window>
