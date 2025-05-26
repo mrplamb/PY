@@ -6,9 +6,14 @@ namespace Final
     {
         private string expectedCode;
 
-        public Verification(string verificationCode)
+        public Verification()
         {
             InitializeComponent();
+            expectedCode = "";
+        }
+
+        public Verification(string verificationCode) : this()
+        {
             expectedCode = verificationCode;
         }
 

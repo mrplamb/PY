@@ -54,6 +54,15 @@ namespace Final
                 return;
             }
 
+            bool passwordMatch = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
+            if (passwordMatch)
+            {
+                MessageBox.Show("Login successful!");
+                return;
+            }
+
+            MessageBox.Show("Login successful!");
+
             AppState.CurrentUser = user;
 
             var tripsPage = new TripsPage();
