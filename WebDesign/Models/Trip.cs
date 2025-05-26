@@ -27,6 +27,9 @@ namespace HolidayManagerWeb.Models
         public bool IsPaid { get; set; } = false;
         public decimal ActualCost { get; set; }
 
+        public string? PlannedActivities { get; set; }
+        public string? ItemsToTake { get; set; }
+
 
     }
 }

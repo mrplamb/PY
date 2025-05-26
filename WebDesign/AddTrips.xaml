@@ -51,7 +51,8 @@
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,20,0,0">
                 <Button Content="Activities suggestions" Width="170" Height="40" Background="#6CA8FF" Foreground="White"  Margin="0,0,10,0"/>
-                <Button Content="Save changes" Width="150" Height="40" Background="Black" Foreground="White" />
+                <Button Content="Save changes" Width="150" Height="40" Background="Black" Foreground="White" 
+                        Click="SaveButton_Click"/>
             </StackPanel>
         </StackPanel>
     </Grid>
