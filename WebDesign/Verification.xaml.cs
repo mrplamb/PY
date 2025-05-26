@@ -9,7 +9,7 @@ namespace Final
         public Verification()
         {
             InitializeComponent();
-            expectedCode = verificationCode;
+            expectedCode = "";
         }
 
         private void Verify_Click(object sender, RoutedEventArgs e)
