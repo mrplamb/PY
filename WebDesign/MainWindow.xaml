@@ -13,7 +13,11 @@
         <!-- Left Panel -->
         <Grid Grid.Column="0" Background="#2D2D33">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="300" Margin="20">
-                <Border Background="#CCCCCC" Height="200" Width="200" />
+                <Border Height="200" Width="200">
+                    <Border.Background>
+                        <ImageBrush ImageSource="Views/Image.jpeg" Stretch="Fill"/>
+                    </Border.Background>
+                </Border>
                 <TextBlock Text="PY Travel" 
                            FontSize="24" 
                            FontWeight="Bold" 
@@ -62,8 +66,9 @@
 
         <!-- Optional Top-Right Logo -->
         <Border Background="#CCCCCC" Width="50" Height="50" CornerRadius="10"
-                HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10">
-            <TextBlock Text="Logo" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#666"/>
+        HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10">
+            <Image Source="Views/App_logo.png" Stretch="Uniform"/>
         </Border>
+
     </Grid>
 </Window>

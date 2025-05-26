@@ -53,6 +53,35 @@ namespace Final
 
         }
 
-       
+        private void MyAccount_Click(object sender, RoutedEventArgs e)
+        {
+            Personal_info personalInfoPage = new Personal_info();
+            personalInfoPage.Show(); // Show the new window
+
+        }
+
+        private void Trips_Click(object sender, RoutedEventArgs e)
+        {
+            TripsPage tripsPage = new TripsPage();
+            tripsPage.Show(); 
+
+        }
+
+        private void Finance_Click(object sender, RoutedEventArgs e)
+        {
+            BankInfo bankInfo = new BankInfo();
+            bankInfo.Show();
+        }
+
+        private void Documents_Click(object sender, RoutedEventArgs e)
+        {
+            UploadDocumentPage documents = new UploadDocumentPage();
+            documents.Show();
+        }
+
+        private void Dashboarding_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

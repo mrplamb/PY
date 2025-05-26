@@ -35,7 +35,7 @@
         <StackPanel Background="#f0f0f3" Grid.Column="0" VerticalAlignment="Stretch">
             <TextBlock Text="Menu " FontSize="20" FontWeight="Bold" Margin="10"/>
             <Button Content="👤 My Account" Margin="10" HorizontalAlignment="Left"/>
-            <Button Content="✈️ Trips" Margin="10" HorizontalAlignment="Left"/>
+            <Button Content="✈️ Trips" Margin="10" HorizontalAlignment="Left" Click="Trips_Click"/>
             <Button Content="💵 Finance" Margin="10" HorizontalAlignment="Left"/>
             <Button Content="💳 My Documents" Margin="10" HorizontalAlignment="Left"/>
             <Button Content="📊 Dashboarding" Margin="10" HorizontalAlignment="Left"/>

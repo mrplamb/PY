@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BCrypt.Net;
 using HolidayManagerWeb.Models;
+
 
 namespace HolidayManagerWeb.Models
 {
@@ -12,6 +14,8 @@ namespace HolidayManagerWeb.Models
     {
         public string Name { get; set; }
         public string Email { get; set; }
+
+        [Column("passwordhash")]
         public string PasswordHash { get; private set; }
         public DateOnly Birth { get; set; }
         public int ID { get; set; }
@@ -55,5 +59,7 @@ namespace HolidayManagerWeb.Models
         {
             return $"{Name} - {Email} - {Birth}";
         }
+        
+        
     }
 }
