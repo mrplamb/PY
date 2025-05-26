@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using HolidayManagerWeb;
 
 
 namespace Final
@@ -122,5 +123,56 @@ namespace Final
         {
 
         }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Input validation
+                if (DestinationComboBox.Text.Trim() == "" ||
+                    StartDatePicker.SelectedDate == null ||
+                    EndDatePicker.SelectedDate == null ||
+                    string.IsNullOrWhiteSpace(BudgetTextBox.Text))
+                {
+                    MessageBox.Show("Please fill in all fields (destination, dates, budget).");
+                    return;
+                }
+
+                // Parse budget
+                if (!decimal.TryParse(BudgetTextBox.Text.Trim(), out decimal budget))
+                {
+                    MessageBox.Show("Invalid budget format. Please enter a valid number.");
+                    return;
+                }
+
+                // Create new trip
+                var trip = new HolidayManagerWeb.Models.Trip
+                {
+                    UserId = AppState.CurrentUser.ID, // Current logged-in user
+                    Destination = DestinationComboBox.Text.Trim(),
+                    StartDate = DateOnly.FromDateTime(StartDatePicker.SelectedDate.Value),
+                    EndDate = DateOnly.FromDateTime(EndDatePicker.SelectedDate.Value),
+                    Budget = budget,
+                    ItemsToTake = ItemsTextBox.Text.Trim(),
+                    PlannedActivities = ActivitiesTextBox.Text.Trim(),
+                    Status = "Planned",
+                    IsPaid = false
+                };
+
+                // Save to DB
+                using (var db = new AppDbContext())
+                {
+                    db.Trips.Add(trip);
+                    db.SaveChanges();
+                }
+
+                MessageBox.Show("Trip saved successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error saving trip: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
     }
 }

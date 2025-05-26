@@ -40,8 +40,17 @@ namespace Final
                     Margin = new Thickness(0, 5, 0, 5),
                     Style = (Style)this.FindResource("RoundedButtonStyle")
                 };
+
+                // Add click handler to view details
+                tripButton.Click += (s, e) =>
+                {
+                    TripDetails detailsWindow = new TripDetails(trip);
+                    detailsWindow.ShowDialog();
+                };
+
                 TripButtonPanel.Children.Add(tripButton);
             }
+
         }
 
         private void AddTripButton_Click(object sender, RoutedEventArgs e)
