@@ -48,22 +48,36 @@ namespace Final
 
             var user = _db.Users.FirstOrDefault(u => u.Email == email);
 
-            if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
+            if (user == null)
             {
-                MessageBox.Show("Invalid email or password.");
+                MessageBox.Show("Invalid email.");
                 return;
             }
 
-            AppState.CurrentUser = user;
+            if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
+            {
+                MessageBox.Show("Incorrect password.");
+                return;
+            }
 
-            var tripsPage = new TripsPage();
-            tripsPage.Show();
+            // Successful login
+            AppState.CurrentUser = user;
+            MessageBox.Show("Login successful!");
+
+            var homepage = new HomePage();
+            homepage.Show();
             this.Close();
         }
+
+
 
         private void EmailTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             // Optional real-time validation or feedback
         }
+
+
     }
+
+
 }

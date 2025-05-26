@@ -1,4 +1,4 @@
-<Window x:Class="Final.BankInfo"
+﻿<Window x:Class="Final.BankInfo"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Finance" Height="600" Width="1000">
@@ -9,15 +9,17 @@
         </Grid.ColumnDefinitions>
 
         <!-- Sidebar -->
-        <StackPanel Background="#f0f0f3" Grid.Column="0">
-            <TextBlock Text="Menu" FontSize="20" FontWeight="Bold" Margin="10"/>
-            <Button Content="My Account" Margin="10" />
-            <Button Content="Trips" Margin="10"/>
-            <Button Content="Finance" Margin="10"/>
-            <Button Content="My Documents" Margin="10"/>
-            <Button Content="Dashboarding" Margin="10"/>
-            <Button Content="Settings" Margin="10"/>
-            <Button Content="Log out" Margin="10"/>
+        <StackPanel Background="White" Grid.Column="0" VerticalAlignment="Stretch">
+            <TextBlock Text="Menu " FontSize="20" FontWeight="Bold" Margin="10"/>
+            <Button Content="👤 My Account" Margin="10" HorizontalAlignment="Left" Click="MyAccount_Click"/>
+            <Button Content="✈️ Trips" Margin="10" HorizontalAlignment="Left" Click="Trips_Click"/>
+            <Button Content="💵 Finance" Margin="10" HorizontalAlignment="Left" Click="Finance_Click"/>
+            <Button Content="💳 My Documents" Margin="10" HorizontalAlignment="Left" Click="Documents_Click"/>
+            <Button Content="📊 Dashboarding" Margin="10" HorizontalAlignment="Left" Click="Dashboarding_Click"/>
+            <StackPanel>
+                <Button Content=" Settings" Margin="5"/>
+                <Button Content="🔙 Log out" Margin="5"/>
+            </StackPanel>
         </StackPanel>
 
         <!-- Main Content -->

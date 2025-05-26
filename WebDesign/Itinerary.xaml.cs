@@ -116,5 +116,30 @@ namespace Final
                 }
             }
         }
+
+        private void MyAccount_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Trips_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Finance_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Documents_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Dashboarding_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
