@@ -83,5 +83,13 @@ namespace Final
         {
 
         }
+
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
+            Settings settingsWindow = new Settings();
+            settingsWindow.Show();
+            this.Close();
+        }
+
     }
 }
