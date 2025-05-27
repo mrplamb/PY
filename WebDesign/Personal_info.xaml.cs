@@ -275,5 +275,13 @@ namespace Final
             // new UploadDocumentPage().Show();
         }
         private void Dashboarding_Click(object sender, RoutedEventArgs e) { }
+
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
+            Settings settingsWindow = new Settings();
+            settingsWindow.Show();
+            this.Close();
+        }
+
     }
 }

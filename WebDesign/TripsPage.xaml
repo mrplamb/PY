@@ -40,7 +40,7 @@
             <Button Content="💳 My Documents" Margin="10" HorizontalAlignment="Left"/>
             <Button Content="📊 Dashboarding" Margin="10" HorizontalAlignment="Left"/>
             <StackPanel>
-                <Button Content=" Settings" Margin="5"/>
+                <Button Content="⚙️ Settings" Margin="5" Click="Settings_Click"/>
                 <Button Content="🔙 Log out" Margin="5"/>
             </StackPanel>
         </StackPanel>

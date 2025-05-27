@@ -76,14 +76,13 @@ namespace Final
         {
 
         }
-       
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult result = MessageBox.Show("Are you sure you want to log out?", "Confirm Logout", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (result == MessageBoxResult.Yes)
             {
-                
                 AppState.CurrentUser = null;
 
                 MainWindow loginPage = new MainWindow();
@@ -92,18 +91,13 @@ namespace Final
                 this.Close();
             }
         }
+
         private void Settings_Click(object sender, RoutedEventArgs e)
-
         {
-
             Settings settingsWindow = new Settings();
-
             settingsWindow.Show();
-
             this.Close();
-
         }
-
 
     }
 }
