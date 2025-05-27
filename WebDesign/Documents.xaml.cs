@@ -109,11 +109,13 @@ namespace Final
             // Ensure the trip itself is loaded with its documents
             var tripWithDocuments = await _db.Trips
                                              .Include(t => t.Documents)
+                                             // CORRECTED: Filtering by TripId, not ID
                                              .FirstOrDefaultAsync(t => t.TripId == _selectedTrip.TripId);
 
-            if (tripWithDocuments != null)
+            CurrentTripDocuments.Clear(); // Clear existing documents before adding new ones
+
+            if (tripWithDocuments != null && tripWithDocuments.Documents != null)
             {
-                CurrentTripDocuments.Clear();
                 foreach (var doc in tripWithDocuments.Documents.OrderBy(d => d.UploadDate))
                 {
                     CurrentTripDocuments.Add(doc);
@@ -191,7 +193,6 @@ namespace Final
                 documentType = selectedItem.Content.ToString();
             }
 
-
             try
             {
                 string originalFileName = Path.GetFileName(_selectedFilePath);
@@ -226,7 +227,7 @@ namespace Final
                 };
 
                 _db.Documents.Add(newDocument); // Add to DbContext
-                await _db.SaveChangesAsync();   // Save to database
+                await _db.SaveChangesAsync();    // Save to database
 
                 CurrentTripDocuments.Add(newDocument); // Add to ObservableCollection to update UI
                 FileNameTextBlock.Text = "No file chosen"; // Reset display

@@ -31,6 +31,8 @@ namespace HolidayManagerWeb.Models
         public string? PlannedActivities { get; set; }
         public string? ItemsToTake { get; set; }
 
+        public string Activities { get; set; }
+
 
     }
 }
