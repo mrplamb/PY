@@ -33,7 +33,7 @@
                         <Button Content="View" Margin="5,0" Padding="8,4" Click="ViewDocument_Click"
                                 Tag="{Binding FilePath}" />
                         <Button Content="Delete" Margin="5,0" Padding="8,4" Click="DeleteDocument_Click"
-                                Tag="{Binding DocumentId}" Style="{StaticResource DestructiveButtonStyle}"/>
+                                Tag="{Binding DocumentId}"/>
                     </StackPanel>
                 </Grid>
             </Border>

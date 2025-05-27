@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using HolidayManagerWeb;
+using static Final.Models.GeoDBCity;
 
 
 namespace Final
@@ -26,12 +28,12 @@ namespace Final
         {
             _typingTimer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(500)
+                Interval = TimeSpan.FromMilliseconds(1000)
             };
             _typingTimer.Tick += TypingTimer_Tick;
         }
 
-        private void DestinationComboBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void DestinationComboBox_PreviewKeyUp(object sender, EventArgs e)
         {
             _typingTimer.Stop();
             _typingTimer.Start();
@@ -55,11 +57,11 @@ namespace Final
                 var request = new HttpRequestMessage
                 {
                     Method = HttpMethod.Get,
-                    RequestUri = new Uri("https://booking-com15.p.rapidapi.com/api/v1/cars/searchCarRentals?pick_up_latitude=40.6397018432617&pick_up_longitude=-73.7791976928711&drop_off_latitude=40.6397018432617&drop_off_longitude=-73.7791976928711&pick_up_time=10%3A00&drop_off_time=10%3A00&driver_age=30&currency_code=USD&location=US"),
+                    RequestUri = new Uri("https://wft-geo-db.p.rapidapi.com/v1/geo/cities?namePrefix={query}&limit=10"),
                     Headers =
                     {
-                        { "x-rapidapi-key", "e5f65929a5mshe3264eb6a810caep120bb5jsndf623e4e3242" },
-                        { "x-rapidapi-host", "booking-com15.p.rapidapi.com" },
+                        { "x-rapidapi-key", "a189e63b7dmshc52a3a69f1614bep1984e5jsnd4fb2434ca85" },
+                        { "x-rapidapi-host", "wft-geo-db.p.rapidapi.com" },
                     },
                 };
 
@@ -67,20 +69,35 @@ namespace Final
                 response.EnsureSuccessStatusCode();
                 var json = await response.Content.ReadAsStringAsync();
                 var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                var destinations = JsonSerializer.Deserialize<List<Destination>>(json, options);
+                var cityResponse = JsonSerializer.Deserialize<GeoDBCityResponse>(json, options);
+                var suggestions = cityResponse.Data
+                    .Select(c => $"{c.City}, {c.Country}")
+                    .ToList();
 
-                var suggestions = new List<string>();
-                foreach (var dest in destinations)
+                foreach (var city in cityResponse.Data)
                 {
-                    if (!string.IsNullOrWhiteSpace(dest.Name) && !string.IsNullOrWhiteSpace(dest.Country))
+                    if (!string.IsNullOrWhiteSpace(city.City) && !string.IsNullOrWhiteSpace(city.Country))
                     {
-                        suggestions.Add($"{dest.Name}, {dest.Country}");
+                        suggestions.Add($"{city.City}, {city.Country}");
                     }
                 }
 
                 DestinationComboBox.ItemsSource = suggestions;
                 DestinationComboBox.IsDropDownOpen = true;
             }
+
+            catch (HttpRequestException ex)
+            {
+                if (ex.StatusCode == HttpStatusCode.TooManyRequests)
+                {
+                    MessageBox.Show("API limit reached. Please try again later.");
+                }
+                else
+                {
+                    MessageBox.Show($"Error: {ex.Message}");
+                }
+            }
+
             catch (Exception ex)
             {
                 MessageBox.Show($"Error fetching destinations: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);

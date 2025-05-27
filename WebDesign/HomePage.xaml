@@ -22,7 +22,7 @@
         </StackPanel>
 
         <StackPanel Grid.Column="1" Margin="20">
-            <TextBlock Text="Welcome, Yasmine Bouanane" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+            <TextBlock Text="Welcome, Pascal" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
 
             <Grid Height="350">
                 <Image

@@ -221,7 +221,8 @@ namespace Final
                     FileType = fileExtension,
                     UploadDate = DateTime.Now,
                     DocumentType = documentType, // Set the selected document type
-                    TripId = _selectedTrip.TripId // Link to the currently selected Trip
+                    TripId = _selectedTrip.TripId, // Link to the currently selected Trip
+                    UserId = AppState.CurrentUser.ID
                 };
 
                 _db.Documents.Add(newDocument); // Add to DbContext

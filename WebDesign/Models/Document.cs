@@ -33,5 +33,9 @@ namespace HolidayManagerWeb.Models
             // FileType and DocumentType will be set during upload, but give a default
             // for string.Empty or "General" for safety if not explicitly set.
         }
+
+        public int UserId { get; set; }
+
+        public User User { get; set; } // Navigation property
     }
 }
