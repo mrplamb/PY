@@ -22,6 +22,8 @@ namespace HolidayManagerWeb.Models
         public string Type { get; set; } = "Credit"; // Credit or Debit
         public string Description { get; set; } = "";
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+
+        public string Category { get; set; } 
     }
 }
 

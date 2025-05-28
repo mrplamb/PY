@@ -43,37 +43,14 @@ namespace Final
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
-            string email = EmailTextBox.Text.Trim();
-            string password = PasswordBox.Password;
-
-            var user = _db.Users.FirstOrDefault(u => u.Email == email);
-
-            if (user == null)
-            {
-                MessageBox.Show("Invalid email.");
-                return;
-            }
-
-            if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
-            {
-                MessageBox.Show("Incorrect password.");
-                return;
-            }
-
-            // Successful login
-            AppState.CurrentUser = user;
-            MessageBox.Show("Login successful!");
-
-            var homepage = new HomePage();
-            homepage.Show();
-            this.Close();
+            LoginPage loginPage = new LoginPage();
+            loginPage.Show();
+            this.Close(); // Close the current sign-up window
         }
 
-
-
-        private void EmailTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void EmailTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            // Optional real-time validation or feedback
+            // Optional real-time validation or feedback for sign-up email
         }
 
 

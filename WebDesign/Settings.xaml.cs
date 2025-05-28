@@ -95,5 +95,73 @@ namespace Final
         {
             MessageBox.Show("Payment methods logic here!");
         }
+
+        private void MyAccount_Click(object sender, RoutedEventArgs e)
+        {
+            Personal_info personalInfoPage = new Personal_info();
+            personalInfoPage.Show(); // Show the new window
+
+        }
+
+        private void Trips_Click(object sender, RoutedEventArgs e)
+        {
+            TripsPage tripsPage = new TripsPage();
+            tripsPage.Show(); // Show the new window
+
+        }
+
+        private void Finance_Click(object sender, RoutedEventArgs e)
+        {
+            BankInfo bankInfo = new BankInfo();
+            bankInfo.Show();
+        }
+
+        private void Documents_Click(object sender, RoutedEventArgs e)
+        {
+            UploadDocumentPage documents = new UploadDocumentPage();
+            documents.Show();
+        }
+
+        private void Dashboarding_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to log out?", "Confirm Logout", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                AppState.CurrentUser = null;
+
+                MainWindow loginPage = new MainWindow();
+                loginPage.Show();
+
+                this.Close();
+            }
+        }
+
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
+            Settings settingsWindow = new Settings();
+            settingsWindow.Show();
+            this.Close();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to log out?", "Confirm Logout", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                AppState.CurrentUser = null;
+
+                MainWindow loginPage = new MainWindow();
+                loginPage.Show();
+
+                this.Close();
+            }
+        }
     }
 }

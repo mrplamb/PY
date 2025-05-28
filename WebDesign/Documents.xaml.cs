@@ -326,39 +326,48 @@ namespace Final
         private void MyAccount_Click(object sender, RoutedEventArgs e)
         {
             Personal_info personalInfoPage = new Personal_info();
-            personalInfoPage.Show();
-            this.Close();
+            personalInfoPage.Show(); // Show the new window
+
         }
 
         private void Trips_Click(object sender, RoutedEventArgs e)
         {
-            // TripsPage tripsPage = new TripsPage(); // Replace with your actual Trips page
-            // tripsPage.Show();
-            // this.Close();
+            TripsPage tripsPage = new TripsPage();
+            tripsPage.Show(); // Show the new window
+
         }
 
         private void Finance_Click(object sender, RoutedEventArgs e)
         {
-            // BankInfo bankInfo = new BankInfo(); // Replace with your actual Finance page
-            // bankInfo.Show();
-            // this.Close();
+            BankInfo bankInfo = new BankInfo();
+            bankInfo.Show();
         }
 
         private void Documents_Click(object sender, RoutedEventArgs e)
         {
-            // Already on Documents page, do nothing or reload if needed.
-            // UploadDocumentPage documentsPage = new UploadDocumentPage();
-            // documentsPage.Show();
-            // this.Close();
+            UploadDocumentPage documents = new UploadDocumentPage();
+            documents.Show();
         }
 
         private void Dashboarding_Click(object sender, RoutedEventArgs e)
         {
-            // DashboardingPage dashboardingPage = new DashboardingPage(); // Replace with your actual Dashboarding page
-            // dashboardingPage.Show();
-            // this.Close();
+
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to log out?", "Confirm Logout", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                AppState.CurrentUser = null;
+
+                MainWindow loginPage = new MainWindow();
+                loginPage.Show();
+
+                this.Close();
+            }
+        }
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
@@ -366,7 +375,21 @@ namespace Final
             settingsWindow.Show();
             this.Close();
         }
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to log out?", "Confirm Logout", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
+            if (result == MessageBoxResult.Yes)
+            {
+                AppState.CurrentUser = null;
 
+                MainWindow loginPage = new MainWindow();
+                loginPage.Show();
+
+                this.Close();
+            }
+        }
+
+        
     }
 }
