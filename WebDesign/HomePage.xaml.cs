@@ -99,5 +99,22 @@ namespace Final
             this.Close();
         }
 
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to log out?", "Confirm Logout", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                AppState.CurrentUser = null;
+
+                MainWindow loginPage = new MainWindow();
+                loginPage.Show();
+
+                this.Close();
+            }
+        }
+
+
+
     }
 }

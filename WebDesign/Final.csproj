@@ -23,11 +23,13 @@
 	<ItemGroup>
 		<PackageReference Include="Ban3.Infrastructures.NetMail" Version="1.0.5" />
 		<PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+		<PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.3.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.13" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.13" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.13" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="OxyPlot.Wpf" Version="2.2.0" />
 		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.3" />
 		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
 	</ItemGroup>

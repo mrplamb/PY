@@ -21,7 +21,7 @@ namespace HolidayManagerWeb.Models
         public DateOnly EndDate { get; set; }
 
         public decimal Budget { get; set; }
-        public string Status { get; set; } = "Planned"; // Planned, Completed, Cancelled
+        public string Status { get; set; } = "Planned"; 
 
         public ICollection<Document> Documents { get; set; } = new List<Document>();
 
@@ -33,6 +33,16 @@ namespace HolidayManagerWeb.Models
 
         public string Activities { get; set; }
 
+        public class Transaction
+        {
+            public string Destination { get; set; }
+        }
 
+        public string Description { get; set; }
+
+        public decimal Amount { get; set; }
+
+        public string Category { get; set; }
     }
 }
+

@@ -258,29 +258,69 @@ namespace Final
         // Sidebar Navigation methods (as per previous discussion, consider using a Frame for better navigation)
         private void MyAccount_Click(object sender, RoutedEventArgs e)
         {
-            // If Personal_info is already the current window, no need to open a new one.
-            // If you use a Frame, you'd navigate it: (this.Parent as Window)?.MainFrame.Navigate(new Personal_infoPage());
+            Personal_info personalInfoPage = new Personal_info();
+            personalInfoPage.Show(); // Show the new window
+
         }
+
         private void Trips_Click(object sender, RoutedEventArgs e)
         {
-            // You should pass the user data to TripsPage or ensure AppState.CurrentUser is set
-            // new TripsPage().Show();
+            TripsPage tripsPage = new TripsPage();
+            tripsPage.Show(); // Show the new window
+
         }
+
         private void Finance_Click(object sender, RoutedEventArgs e)
         {
-            // new BankInfo().Show();
+            BankInfo bankInfo = new BankInfo();
+            bankInfo.Show();
         }
+
         private void Documents_Click(object sender, RoutedEventArgs e)
         {
-            // new UploadDocumentPage().Show();
+            UploadDocumentPage documents = new UploadDocumentPage();
+            documents.Show();
         }
-        private void Dashboarding_Click(object sender, RoutedEventArgs e) { }
+
+        private void Dashboarding_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to log out?", "Confirm Logout", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                AppState.CurrentUser = null;
+
+                MainWindow loginPage = new MainWindow();
+                loginPage.Show();
+
+                this.Close();
+            }
+        }
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
             Settings settingsWindow = new Settings();
             settingsWindow.Show();
             this.Close();
+        }
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to log out?", "Confirm Logout", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                AppState.CurrentUser = null;
+
+                MainWindow loginPage = new MainWindow();
+                loginPage.Show();
+
+                this.Close();
+            }
         }
 
     }
