@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using HolidayManagerWeb.Models;
 
 namespace Final
 {
@@ -89,6 +90,12 @@ namespace Final
             Settings settingsWindow = new Settings();
             settingsWindow.Show();
             this.Close();
+        }
+
+        private void PayNow_Click(object sender, RoutedEventArgs e)
+        {
+                PaymentWindow paymentWindow = new PaymentWindow();
+                paymentWindow.ShowDialog();
         }
 
     }

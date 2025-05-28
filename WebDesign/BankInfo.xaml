@@ -49,6 +49,24 @@
 
                 <Button Content="Save Details" Background="#2D2D33" Foreground="White" FontWeight="Bold" Height="40"
                         HorizontalAlignment="Left" Width="150" Click="SaveButton_Click"/>
+                <Button Content="💳 Pay Now"
+                        Background="#6CA8FF"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        Width="150"
+                        Height="40"
+                        BorderThickness="0"
+                        Click="PayNow_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Background="{TemplateBinding Background}"
+                    CornerRadius="1"
+                    Padding="10">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
             </StackPanel>
         </StackPanel>
     </Grid>
