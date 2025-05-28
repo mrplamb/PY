@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using Final.Services;
 using HolidayManagerWeb.Models;
 
 namespace Final
@@ -97,6 +98,23 @@ namespace Final
                 PaymentWindow paymentWindow = new PaymentWindow();
                 paymentWindow.ShowDialog();
         }
+
+        private void Transactions_Click(object sender, RoutedEventArgs e)
+        {
+            BankTransactions bankTransactionsPage = new BankTransactions();
+            bankTransactionsPage.Show();
+            this.Close(); // Close BankInfo if you want to keep only one window open
+        }
+
+
+        /*private async void TestNordigenConnection()
+        {
+            var nordigenService = new NordigenService(_accessToken);
+            string accessToken = await nordigenService.GetAccessTokenAsync();
+            MessageBox.Show($"Access Token:\n{accessToken}");
+        }*/
+
+
 
     }
 }
