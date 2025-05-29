@@ -144,7 +144,9 @@ namespace Final
 
         private void Dashboarding_Click(object sender, RoutedEventArgs e)
         {
-
+            DashboardPage dashboard = new DashboardPage();
+            dashboard.Show();
+           
         }
 
 

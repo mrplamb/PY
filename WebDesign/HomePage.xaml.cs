@@ -45,18 +45,19 @@ namespace Final
             SlideshowImage.Source = new BitmapImage(new System.Uri(imagePath, System.UriKind.Relative));
         }
 
-        // NEW: Event handler for the "My Account" button
         private void MyAccount_Click(object sender, RoutedEventArgs e)
         {
             Personal_info personalInfoPage = new Personal_info();
-            personalInfoPage.Show(); // Show the new window
-            
+            personalInfoPage.Show(); 
+            this.Close();
+
         }
 
         private void Trips_Click(object sender, RoutedEventArgs e)
         {
             TripsPage tripsPage = new TripsPage();
-            tripsPage.Show(); // Show the new window
+            tripsPage.Show(); 
+            this.Close();
 
         }
 
@@ -64,17 +65,21 @@ namespace Final
         {
             BankInfo bankInfo = new BankInfo();
             bankInfo.Show();
+            this.Close();
         }
 
         private void Documents_Click(object sender, RoutedEventArgs e)
         {
             UploadDocumentPage documents = new UploadDocumentPage();
             documents.Show();
+            this.Close();
         }
 
         private void Dashboarding_Click(object sender, RoutedEventArgs e)
         {
-
+            DashboardPage dashboard = new DashboardPage();
+            dashboard.Show();
+            this.Close();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

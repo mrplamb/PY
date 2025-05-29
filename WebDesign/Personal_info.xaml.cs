@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using HolidayManagerWeb.Models; // For User model
-using HolidayManagerWeb; // For AppDbContext
-using System.Linq; // For LINQ queries (FirstOrDefault)
-using Microsoft.EntityFrameworkCore; // For tracking changes
-using Microsoft.Win32; // For OpenFileDialog
-using System.IO; // For file operations
-using System.Windows.Media.Imaging; // For BitmapImage
+using HolidayManagerWeb.Models; 
+using HolidayManagerWeb; 
+using System.Linq; 
+using Microsoft.EntityFrameworkCore; 
+using Microsoft.Win32; 
+using System.IO;
+using System.Windows.Media.Imaging; 
 
 namespace Final
 {
     public partial class Personal_info : Window
     {
         private readonly AppDbContext _db;
-        private User _currentUser; // Keep a reference to the loaded user
+        private User _currentUser; 
 
         public Personal_info()
         {
             InitializeComponent();
             _db = new AppDbContext();
-            LoadUserData(); // Load user data when the page initializes
+            LoadUserData(); 
         }
 
         private void LoadUserData()
@@ -28,13 +28,12 @@ namespace Final
             if (AppState.CurrentUser == null)
             {
                 MessageBox.Show("User session not found. Please log in again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                // Optionally redirect to login or disable UI elements
-                this.Close(); // Close this window if no user session
+                
+                this.Close(); 
                 return;
             }
 
-            // Retrieve the current user from the database to ensure we have the latest data
-            // Use .Find() for primary key lookup, or .FirstOrDefault() if you don't have the ID
+            
             _currentUser = _db.Users.Find(AppState.CurrentUser.ID);
 
             if (_currentUser == null)
@@ -44,17 +43,17 @@ namespace Final
                 return;
             }
 
-            // Populate UI fields with current user data
+            
             HeaderUserNameTextBlock.Text = _currentUser.Name;
             FullNameTextBox.Text = _currentUser.Name;
-            EmailTextBox.Text = _currentUser.Email; // Email is ReadOnly in XAML
+            EmailTextBox.Text = _currentUser.Email; 
 
-            if (_currentUser.Birth != DateOnly.MinValue) // Check if DOB is set
+            if (_currentUser.Birth != DateOnly.MinValue) 
             {
                 DobDatePicker.SelectedDate = _currentUser.Birth.ToDateTime(TimeOnly.MinValue);
             }
 
-            // Select gender in ComboBox
+            
             if (!string.IsNullOrEmpty(_currentUser.Gender))
             {
                 foreach (ComboBoxItem item in GenderComboBox.Items)
@@ -70,7 +69,7 @@ namespace Final
             PhoneTextBox.Text = _currentUser.PhoneNumber;
             AddressTextBox.Text = _currentUser.Address;
 
-            // Load profile picture
+            
             LoadProfilePicture(_currentUser.ProfilePicturePath);
         }
 
@@ -80,29 +79,28 @@ namespace Final
             {
                 try
                 {
-                    // Use BitmapImage to load the image. Setting CacheOption.OnLoad is important
-                    // to release the file handle immediately, allowing subsequent deletes/overwrites.
+                    
                     BitmapImage bitmap = new BitmapImage();
                     bitmap.BeginInit();
                     bitmap.UriSource = new Uri(imagePath);
-                    bitmap.CacheOption = BitmapCacheOption.OnLoad; // Release file handle
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad; 
                     bitmap.EndInit();
 
                     ProfilePictureImage.Source = bitmap;
-                    // Update header image as well
+                    
                     HeaderProfileImage.ImageSource = bitmap;
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Error loading profile picture: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    // Fallback to default if load fails
+                   
                     ProfilePictureImage.Source = new BitmapImage(new Uri("pack://application:,,,/Final;component/Views/Profile_picture.jpeg"));
                     HeaderProfileImage.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Final;component/Views/Profile_picture.jpeg"));
                 }
             }
             else
             {
-                // Set default image if no path or file not found
+                
                 ProfilePictureImage.Source = new BitmapImage(new Uri("pack://application:,,,/Final;component/Views/Profile_picture.jpeg"));
                 HeaderProfileImage.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Final;component/Views/Profile_picture.jpeg"));
             }
@@ -117,18 +115,18 @@ namespace Final
                 return;
             }
 
-            // Update _currentUser object with values from UI fields
+            
             _currentUser.Name = FullNameTextBox.Text.Trim();
-            // Email is ReadOnly, so no need to update it from TextBox
+            
             _currentUser.Birth = DobDatePicker.SelectedDate.HasValue
                 ? DateOnly.FromDateTime(DobDatePicker.SelectedDate.Value)
-                : DateOnly.MinValue; // Or handle as validation error if DOB is mandatory
+                : DateOnly.MinValue; 
 
             _currentUser.Gender = (GenderComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
             _currentUser.PhoneNumber = PhoneTextBox.Text.Trim();
             _currentUser.Address = AddressTextBox.Text.Trim();
 
-            // Validate data if necessary before saving
+            
             if (string.IsNullOrWhiteSpace(_currentUser.Name) || string.IsNullOrWhiteSpace(_currentUser.Email))
             {
                 MessageBox.Show("Name and Email are required.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -137,12 +135,11 @@ namespace Final
 
             try
             {
-                // Mark the entity as modified so EF Core knows to update it
+                
                 _db.Entry(_currentUser).State = EntityState.Modified;
-                await _db.SaveChangesAsync(); // Use await for async save
+                await _db.SaveChangesAsync();
 
-                // Update AppState.CurrentUser with the saved changes
-                // This is important so other parts of the app use the latest data
+                
                 AppState.CurrentUser = _currentUser;
 
                 MessageBox.Show("Personal information saved successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -150,9 +147,9 @@ namespace Final
             catch (Exception ex)
             {
                 MessageBox.Show($"Error saving changes: {ex.Message}\nInner Exception: {ex.InnerException?.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                // Reload data in case of error to revert unsaved changes in UI
-                _db.Entry(_currentUser).Reload(); // Reloads the entity from the database
-                LoadUserData(); // Reload UI to reflect database state
+                
+                _db.Entry(_currentUser).Reload(); 
+                LoadUserData(); 
             }
         }
 
@@ -176,7 +173,7 @@ namespace Final
                         Directory.CreateDirectory(appImagesFolder);
                     }
 
-                    // Generate a unique filename to prevent conflicts
+                    
                     string fileName = $"{_currentUser.ID}_{Guid.NewGuid()}{Path.GetExtension(sourceFilePath)}";
                     string destinationFilePath = Path.Combine(appImagesFolder, fileName);
 
@@ -255,11 +252,12 @@ namespace Final
         private void AddressTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) { }
         private void BackToHome_Click(object sender, RoutedEventArgs e) { this.Close(); }
 
-        // Sidebar Navigation methods (as per previous discussion, consider using a Frame for better navigation)
+        
         private void MyAccount_Click(object sender, RoutedEventArgs e)
         {
             Personal_info personalInfoPage = new Personal_info();
             personalInfoPage.Show(); // Show the new window
+            this.Close();
 
         }
 
@@ -284,7 +282,9 @@ namespace Final
 
         private void Dashboarding_Click(object sender, RoutedEventArgs e)
         {
-
+            DashboardPage dashboard = new DashboardPage();
+            dashboard.Show();
+            this.Close();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

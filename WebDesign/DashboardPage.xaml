@@ -1,0 +1,35 @@
+﻿<Window x:Class="Final.DashboardPage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Final"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"  mc:Ignorable="d"
+        Title="DashboardPage" Height="450" Width="800">
+    <Grid>
+        <StackPanel>
+            <TextBlock Text="Select a Trip to view expenses by category:" Margin="10,10,10,5" FontSize="14" FontWeight="Bold"/>
+            <ComboBox x:Name="TripComboBox" SelectionChanged="TripComboBox_SelectionChanged" Margin="10" DisplayMemberPath="Destination"/>
+
+            <lvc:PieChart x:Name="ExpensePieChart"
+                          Margin="10"
+                          LegendLocation="Right"
+                          InnerRadius="0"  Series="{Binding CategorySeries}">
+                <lvc:PieChart.DataTooltip>
+                    <lvc:DefaultTooltip BulletSize="20"/>
+                </lvc:PieChart.DataTooltip>
+                <lvc:PieChart.ChartLegend>
+                    <lvc:DefaultLegend BulletSize="20"/>
+                </lvc:PieChart.ChartLegend>
+            </lvc:PieChart>
+
+            <TextBlock x:Name="TotalExpensesTextBlock"
+                       Margin="10,0,10,10"
+                       HorizontalAlignment="Center"
+                       FontSize="16"
+                       FontWeight="SemiBold"
+                       TextAlignment="Center"/>
+
+        </StackPanel>
+    </Grid>
+</Window>

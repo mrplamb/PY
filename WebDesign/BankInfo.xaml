@@ -165,6 +165,12 @@
                         <Button Content="💳 Pay Now" Style="{StaticResource SquareButtonStyle}"
                                 Background="{StaticResource OrangeAccent}" Foreground="{StaticResource LightText}"
                                 Width="150" Click="PayNow_Click"/>
+                        <Button Content="Transactions" Style="{StaticResource SquareButtonStyle}"
+
+        Background="{DynamicResource MenuBackground}" Foreground="{StaticResource LightText}"
+
+        Width="150" Margin="20,0,15,0" Click="Transactions_Click"/>
+
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

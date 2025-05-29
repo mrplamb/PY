@@ -5,10 +5,11 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using HolidayManagerWeb;
-using HolidayManagerWeb.Models;
+using HolidayManagerWeb.Models; 
 using Final.Services;
 using System.Diagnostics;
 using System.Windows.Controls;
+
 
 namespace Final
 {
@@ -16,9 +17,10 @@ namespace Final
     {
         private readonly NordigenService _nordigenService;
         private readonly AppDbContext _db;
-        private readonly string _accessToken = "sandbox_b98yS_QfoQtdN0R0Uye3edkv7pscidSKTxHIl0fh";
+        private readonly string _accessToken = "sandbox_token";
 
         public ObservableCollection<TransactionItem> Transactions { get; set; } = new();
+        public ObservableCollection<string> Categories { get; set; } = new(); 
 
         public BankTransactions()
         {
@@ -28,12 +30,14 @@ namespace Final
             _nordigenService = new NordigenService(_accessToken);
 
             TransactionsListView.ItemsSource = Transactions;
+            CategoryComboBox.ItemsSource = Categories; 
 
             LoadTrips();
             LoadAccounts();
+            LoadCategoriesFromTransactions(); 
         }
 
-        // Load user's trips
+        
         private void LoadTrips()
         {
             if (AppState.CurrentUser == null) return;
@@ -51,42 +55,6 @@ namespace Final
                 TripComboBox.SelectedIndex = 0;
         }
 
-        // Load linked bank accounts
-        /*private async void LoadAccounts()
-        {
-            try
-            {
-                var requisitionId = "3fa85f64-5717-4562-b3fc-2c963f66afa6"; // Replace with your real requisition ID
-                var json = await _nordigenService.GetLinkedAccountsAsync(requisitionId);
-
-                var doc = JsonDocument.Parse(json);
-                if (doc.RootElement.TryGetProperty("accounts", out var accountsElement) &&
-                    accountsElement.ValueKind == JsonValueKind.Array)
-                {
-                    var accounts = accountsElement.EnumerateArray()
-                        .Select(acc => new { Id = acc.GetString() })
-                        .ToList();
-
-                    AccountComboBox.ItemsSource = accounts;
-                    AccountComboBox.DisplayMemberPath = "Id";
-                    AccountComboBox.SelectedValuePath = "Id";
-
-                    if (accounts.Any())
-                        AccountComboBox.SelectedIndex = 0;
-                }
-                else
-                {
-                    MessageBox.Show("No linked accounts found.");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error fetching accounts: {ex.Message}");
-            }
-        }*/
-
-
-        // Fetch transactions for selected account and link to selected trip
         private async void FetchTransactions_Click(object sender, RoutedEventArgs e)
         {
             if (TripComboBox.SelectedItem is not Trip selectedTrip)
@@ -112,6 +80,7 @@ namespace Final
                                 Date = txn.GetProperty("bookingDate").GetString(),
                                 Description = txn.GetProperty("remittanceInformationUnstructured").GetString(),
                                 Amount = txn.GetProperty("transactionAmount").GetProperty("amount").GetString()
+                                
                             }).ToList();
 
                         await SaveTransactionsToDb(transactions, selectedTrip);
@@ -123,6 +92,7 @@ namespace Final
                         }
 
                         MessageBox.Show("Transactions fetched and saved!");
+                        LoadCategoriesFromTransactions(); 
                     }
                     else
                     {
@@ -140,19 +110,23 @@ namespace Final
             }
         }
 
-        // Save fetched transactions to the database, linked to selected trip
-        private async Task SaveTransactionsToDb(IEnumerable<TransactionItem> transactions, Trip selectedTrip)
+        
+        private async Task SaveTransactionsToDb(IEnumerable<TransactionItem> transactionItems, Trip selectedTrip)
         {
-            foreach (var txn in transactions)
+            foreach (var txnItem in transactionItems)
             {
+                
+                string category = CategoryComboBox.SelectedItem as string ?? "Uncategorized"; 
+
                 var transaction = new Transaction
                 {
                     UserId = AppState.CurrentUser.ID,
                     TripId = selectedTrip.TripId,
-                    Amount = decimal.TryParse(txn.Amount, out var amt) ? amt : 0,
-                    Timestamp = DateTime.TryParse(txn.Date, out var date) ? date : DateTime.Now,
-                    Description = txn.Description,
-                    Type = txn.Amount.StartsWith("-") ? "Debit" : "Credit"
+                    Amount = decimal.TryParse(txnItem.Amount, out var amt) ? amt : 0,
+                    Timestamp = DateTime.TryParse(txnItem.Date, out var date) ? date : DateTime.Now,
+                    Description = txnItem.Description,
+                    Type = txnItem.Amount.StartsWith("-") ? "Debit" : "Credit",
+                    Category = category 
                 };
 
                 _db.Transactions.Add(transaction);
@@ -161,12 +135,17 @@ namespace Final
             await _db.SaveChangesAsync();
         }
 
-        // Manually add a transaction linked to the selected trip
+       
         private async void AddManualTransaction_Click(object sender, RoutedEventArgs e)
         {
             if (TripComboBox.SelectedItem is not Trip selectedTrip)
             {
                 MessageBox.Show("Please select a trip to link this transaction.");
+                return;
+            }
+            if (CategoryComboBox.SelectedItem is not string selectedCategory) 
+            {
+                MessageBox.Show("Please select a category for the manual transaction.");
                 return;
             }
 
@@ -183,35 +162,39 @@ namespace Final
                 Amount = amount,
                 Timestamp = ManualDatePicker.SelectedDate ?? DateTime.Now,
                 Description = ManualDescriptionTextBox.Text,
-                Type = amount < 0 ? "Debit" : "Credit"
+                Type = amount < 0 ? "Debit" : "Credit",
+                Category = selectedCategory 
             };
 
             _db.Transactions.Add(manualTransaction);
             await _db.SaveChangesAsync();
 
+            // Add to UI and refresh categories
             Transactions.Add(new TransactionItem
             {
                 Date = manualTransaction.Timestamp.ToShortDateString(),
                 Description = manualTransaction.Description,
-                Amount = manualTransaction.Amount.ToString()
+                Amount = manualTransaction.Amount.ToString(),
+                Category = manualTransaction.Category 
             });
 
             MessageBox.Show("Manual transaction added!");
+            LoadCategoriesFromTransactions(); 
+            ClearManualInputFields(); 
         }
 
         private async void CreateRequisition_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                var nordigenService = new NordigenService("6b00fa9b-24fe-4904-b953-3516e6de8a0a", "3500bd016ac5e0e776fb272cd4ae395943f1a343979ac8a20665a4183083800aaa7d636281855d6a800e8dba1eb5c06b41fbfab6b8a3276831e2a986f23edf14");
-                var redirectUrl = "https://yasminebn.be"; // Use any valid URL you control
-                var institutionId = "SANDBOXFINANCE_SFIN0000"; // Replace with actual bank/institution
-                var reference = "HolidayManager"; // Any identifier
+                var nordigenService = new NordigenService("secret ID", "secret key");
+                var redirectUrl = "https://localhost";
+                var institutionId = "SANDBOXFINANCE_SFIN0000"; 
+                var reference = "HolidayManager"; 
 
                 var (requisitionId, link) = await nordigenService.CreateRequisitionAsync(redirectUrl, institutionId, reference);
 
                 MessageBox.Show($"Requisition Created!\nID: {requisitionId}\nLink: {link}", "Success");
-                // 👉 You should open the link in the browser so the user can link their account
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
                 {
                     FileName = link,
@@ -228,12 +211,11 @@ namespace Final
         {
             try
             {
-                var redirectUri = "http://localhost"; // A dummy redirect URI, safe for desktop apps
-                var institutionId = "BELFIUS BELGIUM"; // Replace with a valid institution ID
+                var redirectUri = "http://localhost"; 
+                var institutionId = "BELFIUS BELGIUM"; 
 
                 var authorizationUrl = await _nordigenService.CreateRequisitionAsync(redirectUri, institutionId);
 
-                // Open in default browser:
                 Process.Start(new ProcessStartInfo
                 {
                     FileName = authorizationUrl,
@@ -252,7 +234,7 @@ namespace Final
         {
             try
             {
-                var requisitionId = "3fa85f64-5717-4562-b3fc-2c963f66afa6"; // replace with your real one
+                var requisitionId = "3fa85f64-5717-4562-b3fc-2c963f66afa6"; 
                 var accounts = await _nordigenService.GetLinkedAccountsAsync(requisitionId);
 
                 AccountComboBox.ItemsSource = accounts;
@@ -264,6 +246,7 @@ namespace Final
             }
         }
 
+        
         private void LoadTransactionsForTrip(Trip selectedTrip)
         {
             var tripTransactions = _db.Transactions
@@ -278,7 +261,8 @@ namespace Final
                 {
                     Date = txn.Timestamp.ToShortDateString(),
                     Description = txn.Description,
-                    Amount = txn.Amount.ToString()
+                    Amount = txn.Amount.ToString(),
+                    Category = txn.Category 
                 });
             }
         }
@@ -301,9 +285,9 @@ namespace Final
                     return;
                 }
 
-                // Find the transaction in the DB
+               
                 var transactionToDelete = _db.Transactions
-                    .FirstOrDefault(t => t.TripId == selectedTrip.TripId && t.Description == description);
+                    .FirstOrDefault(t => t.TripId == selectedTrip.TripId && t.Description == description && t.UserId == AppState.CurrentUser.ID);
 
                 if (transactionToDelete == null)
                 {
@@ -325,12 +309,14 @@ namespace Final
                         Transactions.Remove(itemToRemove);
 
                     MessageBox.Show("Transaction deleted.");
+                    LoadCategoriesFromTransactions(); 
                 }
             }
         }
 
         private Transaction _selectedTransactionForEdit;
 
+        
         private void TransactionsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (TransactionsListView.SelectedItem is TransactionItem item)
@@ -338,18 +324,25 @@ namespace Final
                 ManualDatePicker.SelectedDate = DateTime.Parse(item.Date);
                 ManualDescriptionTextBox.Text = item.Description;
                 ManualAmountTextBox.Text = item.Amount;
+                CategoryComboBox.SelectedItem = item.Category; // Set the category dropdown
 
-                // Find in DB for editing later
+               
                 _selectedTransactionForEdit = _db.Transactions
                     .FirstOrDefault(t => t.Description == item.Description && t.UserId == AppState.CurrentUser.ID);
             }
         }
 
+       
         private async void EditTransaction_Click(object sender, RoutedEventArgs e)
         {
             if (_selectedTransactionForEdit == null)
             {
                 MessageBox.Show("Please select a transaction to edit.");
+                return;
+            }
+            if (CategoryComboBox.SelectedItem is not string selectedCategory) 
+            {
+                MessageBox.Show("Please select a category for the transaction.");
                 return;
             }
 
@@ -362,21 +355,155 @@ namespace Final
             _selectedTransactionForEdit.Description = ManualDescriptionTextBox.Text;
             _selectedTransactionForEdit.Timestamp = ManualDatePicker.SelectedDate ?? DateTime.Now;
             _selectedTransactionForEdit.Amount = amount;
+            _selectedTransactionForEdit.Category = selectedCategory; 
 
             await _db.SaveChangesAsync();
 
-            // Refresh UI
+            
             LoadTransactionsForTrip(TripComboBox.SelectedItem as Trip);
+            LoadCategoriesFromTransactions(); 
             MessageBox.Show("Transaction updated!");
+            ClearManualInputFields(); 
         }
 
+        
+        private void LoadCategoriesFromTransactions()
+        {
+            try
+            {
+                Categories.Clear(); 
+
+                
+                var distinctCategories = _db.Transactions
+                                            .Where(t => t.UserId == AppState.CurrentUser.ID && t.Category != null && t.Category != "")
+                                            .Select(t => t.Category)
+                                            .Distinct()
+                                            .OrderBy(c => c)
+                                            .ToList();
+
+                foreach (var category in distinctCategories)
+                {
+                    Categories.Add(category);
+                }
+
+                
+                if (!Categories.Contains("Food")) Categories.Add("Food");
+                if (!Categories.Contains("Transportation")) Categories.Add("Transportation");
+                if (!Categories.Contains("Activities")) Categories.Add("Activities");
+                if (!Categories.Contains("Shopping")) Categories.Add("Shopping");
+                if (!Categories.Contains("Souvenirs")) Categories.Add("Souvenirs");
+                if (!Categories.Contains("Visits")) Categories.Add("Visits");
+                if (!Categories.Contains("Extra Expenses")) Categories.Add("Extra Expenses");
+
+                
+                var sortedCategories = Categories.OrderBy(c => c).ToList();
+                Categories.Clear();
+                foreach (var category in sortedCategories)
+                {
+                    Categories.Add(category);
+                }
+
+               
+                if (Categories.Any())
+                {
+                    CategoryComboBox.SelectedIndex = 0;
+                }
+                else
+                {
+                    CategoryComboBox.SelectedIndex = -1; 
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading categories from transactions: {ex.Message}", "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        
+        private void ClearManualInputFields()
+        {
+            ManualDatePicker.SelectedDate = null;
+            ManualDescriptionTextBox.Clear();
+            ManualAmountTextBox.Clear();
+            CategoryComboBox.SelectedIndex = -1;
+            _selectedTransactionForEdit = null;
+        }
+
+        
+        private void MyAccount_Click(object sender, RoutedEventArgs e)
+        {
+            Personal_info personalInfoPage = new Personal_info();
+            personalInfoPage.Show();
+            this.Close();
+        }
+
+        private void Trips_Click(object sender, RoutedEventArgs e)
+        {
+            TripsPage tripsPage = new TripsPage();
+            tripsPage.Show();
+            this.Close();
+        }
+
+        private void Finance_Click(object sender, RoutedEventArgs e)
+        {
+            BankInfo bankInfo = new BankInfo(); 
+            bankInfo.Show();
+            this.Close();
+        }
+
+        private void Documents_Click(object sender, RoutedEventArgs e)
+        {
+            UploadDocumentPage documents = new UploadDocumentPage();
+            documents.Show();
+            this.Close();
+        }
+
+        private void Dashboarding_Click(object sender, RoutedEventArgs e)
+        {
+            DashboardPage dashboard = new DashboardPage();
+            dashboard.Show();
+            this.Close();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e) 
+        {
+            Logout_Click(sender, e); 
+        }
+
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
+            Settings settingsWindow = new Settings();
+            settingsWindow.Show();
+            this.Close();
+        }
+
+        private void Logout_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to log out?", "Confirm Logout", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                AppState.CurrentUser = null;
+                MainWindow loginPage = new MainWindow();
+                loginPage.Show();
+                this.Close();
+            }
+        }
+
+        private void BackToHome_Click(object sender, RoutedEventArgs e)
+        {
+            HomePage homepage = new HomePage();
+            homepage.Show();
+            this.Close();
+        }
     }
 
-    // Helper class for UI binding
+    
     public class TransactionItem
     {
         public string Date { get; set; }
         public string Description { get; set; }
         public string Amount { get; set; }
+        public string Category { get; set; } 
     }
 }

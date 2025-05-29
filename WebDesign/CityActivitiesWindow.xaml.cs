@@ -1,11 +1,11 @@
-﻿using System.Diagnostics; // This is needed for Process.Start
+﻿using System.Diagnostics; 
 using System.Windows;
-using System.Windows.Controls; // This is for TextBlock
-using System.Windows.Input; // This is for MouseButtonEventArgs
-using HolidayManagerWeb.Models; // Assuming your models (CitySuggestion, PlaceDetail) are here
-using System; // Needed for Uri, UriKind
+using System.Windows.Controls; 
+using System.Windows.Input; 
+using HolidayManagerWeb.Models; 
+using System; 
 
-namespace Final // Make sure this namespace matches your project
+namespace Final 
 {
     public partial class CityActivitiesWindow : Window
     {
@@ -23,12 +23,12 @@ namespace Final // Make sure this namespace matches your project
         {
             if (sender is TextBlock textBlock)
             {
-                // Ensure that 'url' is extracted as a string from the Tag property
+                
                 if (textBlock.Tag is string url && Uri.IsWellFormedUriString(url, UriKind.Absolute))
                 {
                     try
                     {
-                        // Use Process.Start to open the URL in the default browser
+                        
                         Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
                     }
                     catch (Exception ex)
@@ -42,8 +42,6 @@ namespace Final // Make sure this namespace matches your project
                 }
             }
         }
-        // ---------------------------------------------------------------
-        // END OF THE METHOD
-        // ---------------------------------------------------------------
+        
     }
 }

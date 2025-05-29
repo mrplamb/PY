@@ -83,7 +83,9 @@ namespace Final
 
         private void Dashboarding_Click(object sender, RoutedEventArgs e)
         {
-
+            DashboardPage dashboard = new DashboardPage();
+            dashboard.Show();
+            this.Close();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -119,6 +121,21 @@ namespace Final
             BankTransactions bankTransactionsPage = new BankTransactions();
             bankTransactionsPage.Show();
             this.Close(); // Close BankInfo if you want to keep only one window open
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to log out?", "Confirm Logout", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                AppState.CurrentUser = null;
+
+                MainWindow loginPage = new MainWindow();
+                loginPage.Show();
+
+                this.Close();
+            }
         }
 
 

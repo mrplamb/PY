@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections.ObjectModel; // For ObservableCollection
-using System.IO;                    // For file operations
+using System.Collections.ObjectModel; 
+using System.IO;                    
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Imaging; // For profile picture
-using HolidayManagerWeb;            // For AppDbContext
-using HolidayManagerWeb.Models;     // For User, Trip, and Document models
-using Microsoft.EntityFrameworkCore; // For EF Core operations
-using Microsoft.Win32;              // For OpenFileDialog
-using System.Diagnostics;           // For Process.Start
+using System.Windows.Media.Imaging; 
+using HolidayManagerWeb;            
+using HolidayManagerWeb.Models;     
+using Microsoft.EntityFrameworkCore; 
+using Microsoft.Win32;              
+using System.Diagnostics;          
 
 namespace Final
 {
@@ -17,11 +17,11 @@ namespace Final
     {
         private readonly AppDbContext _db;
         private User _currentUser;
-        private Trip _selectedTrip; // To hold the currently selected trip
+        private Trip _selectedTrip; 
 
-        // Use ObservableCollection to automatically update the UI when items are added/removed
+        
         public ObservableCollection<Document> CurrentTripDocuments { get; set; }
-        public ObservableCollection<Trip> UserTrips { get; set; } // To populate the Trip ComboBox
+        public ObservableCollection<Trip> UserTrips { get; set; } 
 
         public UploadDocumentPage()
         {
@@ -30,10 +30,10 @@ namespace Final
             CurrentTripDocuments = new ObservableCollection<Document>();
             UserTrips = new ObservableCollection<Trip>();
 
-            DocumentsList.ItemsSource = CurrentTripDocuments; // Bind the ItemsControl to this collection
-            TripComboBox.ItemsSource = UserTrips; // Bind the Trip ComboBox
+            DocumentsList.ItemsSource = CurrentTripDocuments; 
+            TripComboBox.ItemsSource = UserTrips; 
 
-            LoadUserDataAndTrips(); // Load data when page initializes
+            LoadUserDataAndTrips(); 
         }
 
         private async void LoadUserDataAndTrips()
@@ -45,9 +45,9 @@ namespace Final
                 return;
             }
 
-            // Retrieve the current user and their trips from the database
+            
             _currentUser = await _db.Users
-                                    .Include(u => u.Trips) // Include trips to populate ComboBox
+                                    .Include(u => u.Trips) 
                                     .FirstOrDefaultAsync(u => u.ID == AppState.CurrentUser.ID);
 
             if (_currentUser == null)
@@ -57,18 +57,18 @@ namespace Final
                 return;
             }
 
-            // Populate header user info
+            
             HeaderUserNameTextBlock.Text = _currentUser.Name;
-            LoadProfilePicture(_currentUser.ProfilePicturePath); // Load user's profile picture
+            LoadProfilePicture(_currentUser.ProfilePicturePath); 
 
-            // Populate the Trip ComboBox
+            
             UserTrips.Clear();
-            foreach (var trip in _currentUser.Trips.OrderBy(t => t.StartDate)) // Order trips for better display
+            foreach (var trip in _currentUser.Trips.OrderBy(t => t.StartDate)) 
             {
                 UserTrips.Add(trip);
             }
 
-            // Select the first trip by default if available
+           
             if (UserTrips.Any())
             {
                 TripComboBox.SelectedIndex = 0;
@@ -76,27 +76,27 @@ namespace Final
             else
             {
                 MessageBox.Show("You have no trips. Please create a trip first to upload documents.", "No Trips Found", MessageBoxButton.OK, MessageBoxImage.Information);
-                // Optionally disable upload section if no trips
+                
             }
         }
 
-        // Handles selection change in the Trip ComboBox
+        
         private async void TripComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (TripComboBox.SelectedItem is Trip selectedTrip)
             {
                 _selectedTrip = selectedTrip;
-                // Load documents for the newly selected trip
+                
                 await LoadDocumentsForSelectedTrip();
             }
             else
             {
                 _selectedTrip = null;
-                CurrentTripDocuments.Clear(); // Clear documents if no trip is selected
+                CurrentTripDocuments.Clear(); 
             }
         }
 
-        // Loads documents for the currently selected trip
+        
         private async System.Threading.Tasks.Task LoadDocumentsForSelectedTrip()
         {
             if (_selectedTrip == null)
@@ -105,14 +105,13 @@ namespace Final
                 return;
             }
 
-            // Load documents for the selected trip from the database
-            // Ensure the trip itself is loaded with its documents
+            
             var tripWithDocuments = await _db.Trips
                                              .Include(t => t.Documents)
-                                             // CORRECTED: Filtering by TripId, not ID
+                                             
                                              .FirstOrDefaultAsync(t => t.TripId == _selectedTrip.TripId);
 
-            CurrentTripDocuments.Clear(); // Clear existing documents before adding new ones
+            CurrentTripDocuments.Clear(); 
 
             if (tripWithDocuments != null && tripWithDocuments.Documents != null)
             {
@@ -128,7 +127,7 @@ namespace Final
         }
 
 
-        // Helper method to load the profile picture for the header
+       
         private void LoadProfilePicture(string imagePath)
         {
             if (!string.IsNullOrEmpty(imagePath) && File.Exists(imagePath))
@@ -138,7 +137,7 @@ namespace Final
                     BitmapImage bitmap = new BitmapImage();
                     bitmap.BeginInit();
                     bitmap.UriSource = new Uri(imagePath);
-                    bitmap.CacheOption = BitmapCacheOption.OnLoad; // Release file handle
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad; 
                     bitmap.EndInit();
                     HeaderProfileImage.ImageSource = bitmap;
                 }
@@ -155,9 +154,8 @@ namespace Final
         }
 
 
-        private string _selectedFilePath; // To hold the path of the file chosen by the user
-
-        // Handles the "Browse..." button click to open file dialog
+        private string _selectedFilePath; 
+        
         private void BrowseDocument_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -167,11 +165,11 @@ namespace Final
             if (openFileDialog.ShowDialog() == true)
             {
                 _selectedFilePath = openFileDialog.FileName;
-                FileNameTextBlock.Text = Path.GetFileName(_selectedFilePath); // Display only the file name
+                FileNameTextBlock.Text = Path.GetFileName(_selectedFilePath); 
             }
         }
 
-        // Handles the "Upload Document" button click
+       
         private async void UploadDocument_Click(object sender, RoutedEventArgs e)
         {
             if (_selectedTrip == null)
@@ -186,8 +184,8 @@ namespace Final
                 return;
             }
 
-            // Get selected document type
-            string documentType = "General"; // Default value
+            
+            string documentType = "General"; 
             if (DocumentTypeComboBox.SelectedItem is ComboBoxItem selectedItem)
             {
                 documentType = selectedItem.Content.ToString();
@@ -198,40 +196,40 @@ namespace Final
                 string originalFileName = Path.GetFileName(_selectedFilePath);
                 string fileExtension = Path.GetExtension(_selectedFilePath).ToLower();
                 string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                // Store documents in a folder specific to the Trip ID
+                
                 string tripDocsFolder = Path.Combine(appDataPath, "HolidayManager", "TripDocuments", _selectedTrip.TripId.ToString());
 
-                // Create trip-specific documents folder if it doesn't exist
+                
                 if (!Directory.Exists(tripDocsFolder))
                 {
                     Directory.CreateDirectory(tripDocsFolder);
                 }
 
-                // Generate a unique filename to prevent conflicts
+                
                 string uniqueFileName = $"{Guid.NewGuid()}_{originalFileName}";
                 string destinationFilePath = Path.Combine(tripDocsFolder, uniqueFileName);
 
-                // Copy the file
+                
                 File.Copy(_selectedFilePath, destinationFilePath, true);
 
-                // Create new Document object
+                
                 var newDocument = new Document
                 {
                     FileName = originalFileName,
                     FilePath = destinationFilePath,
                     FileType = fileExtension,
                     UploadDate = DateTime.Now,
-                    DocumentType = documentType, // Set the selected document type
-                    TripId = _selectedTrip.TripId, // Link to the currently selected Trip
+                    DocumentType = documentType, 
+                    TripId = _selectedTrip.TripId, 
                     UserId = AppState.CurrentUser.ID
                 };
 
-                _db.Documents.Add(newDocument); // Add to DbContext
-                await _db.SaveChangesAsync();    // Save to database
+                _db.Documents.Add(newDocument); 
+                await _db.SaveChangesAsync();    
 
-                CurrentTripDocuments.Add(newDocument); // Add to ObservableCollection to update UI
-                FileNameTextBlock.Text = "No file chosen"; // Reset display
-                _selectedFilePath = null; // Clear selected file path
+                CurrentTripDocuments.Add(newDocument); 
+                FileNameTextBlock.Text = "No file chosen"; 
+                _selectedFilePath = null; 
 
                 MessageBox.Show($"Document '{originalFileName}' uploaded successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -241,17 +239,17 @@ namespace Final
             }
         }
 
-        // Handles the "View" button click for a document
+       
         private void ViewDocument_Click(object sender, RoutedEventArgs e)
         {
-            // The Tag property of the button holds the FilePath
+            
             string filePath = (sender as Button)?.Tag?.ToString();
 
             if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
             {
                 try
                 {
-                    // Open the document using the default application
+                   
                     Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
                 }
                 catch (Exception ex)
@@ -265,10 +263,9 @@ namespace Final
             }
         }
 
-        // Handles the "Delete" button click for a document
+       
         private async void DeleteDocument_Click(object sender, RoutedEventArgs e)
         {
-            // The Tag property of the button holds the DocumentId
             if (!int.TryParse((sender as Button)?.Tag?.ToString(), out int documentId))
             {
                 MessageBox.Show("Could not get document ID for deletion.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -281,12 +278,12 @@ namespace Final
             {
                 try
                 {
-                    // Find the document in the database
+                  
                     var documentToDelete = await _db.Documents.FindAsync(documentId);
 
                     if (documentToDelete != null)
                     {
-                        // Delete the file from the file system
+                        
                         if (File.Exists(documentToDelete.FilePath))
                         {
                             try
@@ -296,15 +293,15 @@ namespace Final
                             catch (Exception ex)
                             {
                                 Console.WriteLine($"Warning: Could not delete document file from disk: {ex.Message}");
-                                // Don't block DB deletion if file delete fails, but log it
+                                
                             }
                         }
 
-                        // Remove from database and save changes
+                        
                         _db.Documents.Remove(documentToDelete);
                         await _db.SaveChangesAsync();
 
-                        // Remove from ObservableCollection to update UI
+                        
                         CurrentTripDocuments.Remove(documentToDelete);
 
                         MessageBox.Show("Document deleted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -321,19 +318,19 @@ namespace Final
             }
         }
 
-
-        // Sidebar Navigation Methods (ensure these open the correct windows)
         private void MyAccount_Click(object sender, RoutedEventArgs e)
         {
             Personal_info personalInfoPage = new Personal_info();
-            personalInfoPage.Show(); // Show the new window
+            personalInfoPage.Show();
+            this.Close();
 
         }
 
         private void Trips_Click(object sender, RoutedEventArgs e)
         {
             TripsPage tripsPage = new TripsPage();
-            tripsPage.Show(); // Show the new window
+            tripsPage.Show();
+            this.Close();
 
         }
 
@@ -341,17 +338,21 @@ namespace Final
         {
             BankInfo bankInfo = new BankInfo();
             bankInfo.Show();
+            this.Close();
         }
 
         private void Documents_Click(object sender, RoutedEventArgs e)
         {
             UploadDocumentPage documents = new UploadDocumentPage();
             documents.Show();
+            this.Close();
         }
 
         private void Dashboarding_Click(object sender, RoutedEventArgs e)
         {
-
+            DashboardPage dashboard = new DashboardPage();
+            dashboard.Show();
+            this.Close();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
