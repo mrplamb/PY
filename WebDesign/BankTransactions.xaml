@@ -3,8 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Final"
-        mc:Ignorable="d"
+        xmlns:local="clr-namespace:Final"  mc:Ignorable="d"
         Title="Bank Transactions" Height="650" Width="1000"
         WindowStartupLocation="CenterScreen">
 
@@ -136,6 +135,7 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="BorderBrush" Value="#CCCCCC"/>
         </Style>
+
     </Window.Resources>
 
     <Grid Background="{StaticResource PanelBackground}">
@@ -149,12 +149,12 @@
             <StackPanel VerticalAlignment="Stretch">
                 <TextBlock Text="Menu" FontSize="22" FontWeight="Bold" Margin="20,20,10,10" Foreground="{StaticResource LightText}"/>
                 <Button Content="👤 My Account" Style="{StaticResource MenuButtonStyle}" Click="MyAccount_Click"/>
-                <Button Content="✈️ Trips" Style="{StaticResource MenuButtonStyle}" Click="Trips_Click"/>
+                <Button Content="✈ Trips" Style="{StaticResource MenuButtonStyle}" Click="Trips_Click"/>
                 <Button Content="💵 Finance" Style="{StaticResource MenuButtonStyle}" Click="Finance_Click"/>
                 <Button Content="💳 My Documents" Style="{StaticResource MenuButtonStyle}" Click="Documents_Click"/>
                 <Button Content="📊 Dashboarding" Style="{StaticResource MenuButtonStyle}" Click="Dashboarding_Click"/>
                 <Border Height="1" Background="#555555" Margin="10,10"/>
-                <Button Content="⚙️ Settings" Style="{StaticResource MenuButtonStyle}" Click="Settings_Click"/>
+                <Button Content="⚙ Settings" Style="{StaticResource MenuButtonStyle}" Click="Settings_Click"/>
                 <Button Content="🔙 Log out" Style="{StaticResource MenuButtonStyle}" Click="Logout_Click"/>
             </StackPanel>
         </Border>
@@ -165,7 +165,8 @@
             </Border.Effect>
             <ScrollViewer>
                 <StackPanel Margin="30">
-                    
+
+
                     <Button Content="Back to Home" Click="BackToHome_Click"
                             Style="{StaticResource SquareButtonStyle}"
                             HorizontalAlignment="Left" Width="150" Margin="0,0,0,25"/>

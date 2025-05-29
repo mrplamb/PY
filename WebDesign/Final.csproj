@@ -23,6 +23,7 @@
 	<ItemGroup>
 		<PackageReference Include="Ban3.Infrastructures.NetMail" Version="1.0.5" />
 		<PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+		<PackageReference Include="CSharpMarkup.WinUI.LiveChartsCore.SkiaSharpView" Version="3.1.2" />
 		<PackageReference Include="Extended.Wpf.Toolkit" Version="4.7.25104.5739" />
 		<PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.3.0" />
