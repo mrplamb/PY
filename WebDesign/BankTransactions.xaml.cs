@@ -55,6 +55,8 @@ namespace Final
                 TripComboBox.SelectedIndex = 0;
         }
 
+
+        // Fetch transactions for selected account and link to selected trip
         private async void FetchTransactions_Click(object sender, RoutedEventArgs e)
         {
             if (TripComboBox.SelectedItem is not Trip selectedTrip)

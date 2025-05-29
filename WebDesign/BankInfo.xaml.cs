@@ -137,17 +137,6 @@ namespace Final
                 this.Close();
             }
         }
-
-
-        /*private async void TestNordigenConnection()
-        {
-            var nordigenService = new NordigenService(_accessToken);
-            string accessToken = await nordigenService.GetAccessTokenAsync();
-            MessageBox.Show($"Access Token:\n{accessToken}");
-        }*/
-
-
-
     }
 
 
