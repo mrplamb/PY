@@ -122,15 +122,6 @@ namespace Final
         }
 
 
-        /*private async void TestNordigenConnection()
-        {
-            var nordigenService = new NordigenService(_accessToken);
-            string accessToken = await nordigenService.GetAccessTokenAsync();
-            MessageBox.Show($"Access Token:\n{accessToken}");
-        }*/
-
-
-
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             MessageBoxResult result = MessageBox.Show("Are you sure you want to log out?", "Confirm Logout", MessageBoxButton.YesNo, MessageBoxImage.Question);

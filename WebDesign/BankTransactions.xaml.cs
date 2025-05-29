@@ -16,7 +16,7 @@ namespace Final
     {
         private readonly NordigenService _nordigenService;
         private readonly AppDbContext _db;
-        private readonly string _accessToken = "sandbox_b98yS_QfoQtdN0R0Uye3edkv7pscidSKTxHIl0fh";
+        private readonly string _accessToken = "sandbox_token";
 
         public ObservableCollection<TransactionItem> Transactions { get; set; } = new();
 
@@ -50,40 +50,6 @@ namespace Final
             if (trips.Any())
                 TripComboBox.SelectedIndex = 0;
         }
-
-        // Load linked bank accounts
-        /*private async void LoadAccounts()
-        {
-            try
-            {
-                var requisitionId = "3fa85f64-5717-4562-b3fc-2c963f66afa6"; // Replace with your real requisition ID
-                var json = await _nordigenService.GetLinkedAccountsAsync(requisitionId);
-
-                var doc = JsonDocument.Parse(json);
-                if (doc.RootElement.TryGetProperty("accounts", out var accountsElement) &&
-                    accountsElement.ValueKind == JsonValueKind.Array)
-                {
-                    var accounts = accountsElement.EnumerateArray()
-                        .Select(acc => new { Id = acc.GetString() })
-                        .ToList();
-
-                    AccountComboBox.ItemsSource = accounts;
-                    AccountComboBox.DisplayMemberPath = "Id";
-                    AccountComboBox.SelectedValuePath = "Id";
-
-                    if (accounts.Any())
-                        AccountComboBox.SelectedIndex = 0;
-                }
-                else
-                {
-                    MessageBox.Show("No linked accounts found.");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error fetching accounts: {ex.Message}");
-            }
-        }*/
 
 
         // Fetch transactions for selected account and link to selected trip
@@ -203,15 +169,15 @@ namespace Final
         {
             try
             {
-                var nordigenService = new NordigenService("6b00fa9b-24fe-4904-b953-3516e6de8a0a", "3500bd016ac5e0e776fb272cd4ae395943f1a343979ac8a20665a4183083800aaa7d636281855d6a800e8dba1eb5c06b41fbfab6b8a3276831e2a986f23edf14");
-                var redirectUrl = "https://yasminebn.be"; // Use any valid URL you control
+                var nordigenService = new NordigenService("secretID", "secret key");
+                var redirectUrl = "https://localhost"; // Use any valid URL you control
                 var institutionId = "SANDBOXFINANCE_SFIN0000"; // Replace with actual bank/institution
                 var reference = "HolidayManager"; // Any identifier
 
                 var (requisitionId, link) = await nordigenService.CreateRequisitionAsync(redirectUrl, institutionId, reference);
 
                 MessageBox.Show($"Requisition Created!\nID: {requisitionId}\nLink: {link}", "Success");
-                // 👉 You should open the link in the browser so the user can link their account
+                // You should open the link in the browser so the user can link their account
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
                 {
                     FileName = link,
@@ -368,6 +334,84 @@ namespace Final
             // Refresh UI
             LoadTransactionsForTrip(TripComboBox.SelectedItem as Trip);
             MessageBox.Show("Transaction updated!");
+        }
+
+        private void MyAccount_Click(object sender, RoutedEventArgs e)
+        {
+            Personal_info personalInfoPage = new Personal_info();
+            personalInfoPage.Show();
+            this.Close();
+
+        }
+
+        private void Trips_Click(object sender, RoutedEventArgs e)
+        {
+            TripsPage tripsPage = new TripsPage();
+            tripsPage.Show();
+            this.Close();
+
+        }
+
+        private void Finance_Click(object sender, RoutedEventArgs e)
+        {
+            BankInfo bankInfo = new BankInfo();
+            bankInfo.Show();
+            this.Close();
+        }
+
+        private void Documents_Click(object sender, RoutedEventArgs e)
+        {
+            UploadDocumentPage documents = new UploadDocumentPage();
+            documents.Show();
+            this.Close();
+        }
+
+        private void Dashboarding_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to log out?", "Confirm Logout", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                AppState.CurrentUser = null;
+
+                MainWindow loginPage = new MainWindow();
+                loginPage.Show();
+
+                this.Close();
+            }
+        }
+
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
+            Settings settingsWindow = new Settings();
+            settingsWindow.Show();
+            this.Close();
+        }
+        private void Logout_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to log out?", "Confirm Logout", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                AppState.CurrentUser = null;
+
+                MainWindow loginPage = new MainWindow();
+                loginPage.Show();
+
+                this.Close();
+            }
+        }
+
+        private void BackToHome_Click(object sender, RoutedEventArgs e)
+        {
+            HomePage homepage = new HomePage();
+            homepage.Show();
+            this.Close();
         }
 
     }

@@ -1,69 +1,242 @@
 ﻿<Window x:Class="Final.BankTransactions"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Bank Transactions" Height="600" Width="900">
-    <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Final"  mc:Ignorable="d"
+        Title="Bank Transactions" Height="650" Width="1000"
+        WindowStartupLocation="CenterScreen">
 
-        <!-- Trip Picker and Account Picker -->
-        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-            <TextBlock Text="Select Trip:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-            <ComboBox x:Name="TripComboBox" 
-                      Width="200" 
-                      Margin="0,0,20,0" 
-                      DisplayMemberPath="Destination"
-                      SelectedValuePath="TripId"
-                      SelectionChanged="TripComboBox_SelectionChanged"/>
+    <Window.Resources>
+        <SolidColorBrush x:Key="PrimaryBlue" Color="#3498DB"/>
+        <SolidColorBrush x:Key="AccentBlue" Color="#2980B9"/>
+        <SolidColorBrush x:Key="DarkText" Color="#333333"/>
+        <SolidColorBrush x:Key="LightText" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="PanelBackground" Color="#F5F8FA"/>
+        <SolidColorBrush x:Key="MenuBackground" Color="#2C3E50"/>
+        <SolidColorBrush x:Key="OrangeAccent" Color="#E67E22"/>
+        <SolidColorBrush x:Key="RedAccent" Color="#E74C3C"/>
 
-            <TextBlock Text="Select Account:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-            <ComboBox x:Name="AccountComboBox" Width="200" Margin="0,0,20,0" />
+        <Style TargetType="Button" x:Key="SquareButtonStyle">
+            <Setter Property="Background" Value="{StaticResource PrimaryBlue}"/>
+            <Setter Property="Foreground" Value="{StaticResource LightText}"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="15,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <Border.Effect>
+                                <DropShadowEffect ShadowDepth="2" Direction="270" Color="#BBBBBB" Opacity="0.6" BlurRadius="5"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource AccentBlue}"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect ShadowDepth="3" Direction="270" Color="#AAAAAA" Opacity="0.8" BlurRadius="8"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="{StaticResource DarkText}"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect ShadowDepth="0" Color="Transparent"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
-            <Button Content="Fetch Transactions" Click="FetchTransactions_Click"/>
-        </StackPanel>
+        <Style TargetType="Button" x:Key="MenuButtonStyle" BasedOn="{StaticResource SquareButtonStyle}">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="Margin" Value="10,5"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource LightText}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="15,0,0,0"/>
+            <Setter Property="Effect" Value="{x:Null}"/>
+            <Setter Property="ContentTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" HorizontalAlignment="Left" Margin="0"/>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource AccentBlue}"/>
+                    <Setter Property="Foreground" Value="{StaticResource LightText}"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="{StaticResource OrangeAccent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
-        <!-- Transactions List -->
-        <ListView x:Name="TransactionsListView" Grid.Row="1" Margin="0,0,0,10" SelectionChanged="TransactionsListView_SelectionChanged">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" Width="100"/>
-                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="300"/>
-                    <GridViewColumn Header="Amount" DisplayMemberBinding="{Binding Amount}" Width="100"/>
-                    <GridViewColumn Header="Actions" Width="100">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Content="Delete" 
-                                Background="Red" 
-                                Foreground="White"
-                                Click="DeleteTransaction_Click"
-                                Tag="{Binding Description}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
+        <Style TargetType="Button" x:Key="SubNavigationButtonStyle" BasedOn="{StaticResource SquareButtonStyle}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource DarkText}"/>
+            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="Height" Value="Auto"/>
+            <Setter Property="Effect" Value="{x:Null}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource PrimaryBlue}"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource AccentBlue}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="{x:Type PasswordBox}" BasedOn="{StaticResource {x:Type TextBox}}"/>
+        <Style TargetType="{x:Type ComboBox}">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="{x:Type DatePicker}">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+        </Style>
 
-        <!-- Manual Add Transaction Section -->
-        <StackPanel Grid.Row="1" Margin="0,10,0,0" VerticalAlignment="Bottom">
-            <TextBlock Text="Manually Add Transaction" FontWeight="Bold" Margin="0,10,0,5"/>
+    </Window.Resources>
 
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                <TextBlock Text="Date:" VerticalAlignment="Center"/>
-                <DatePicker x:Name="ManualDatePicker" Width="150" Margin="5,0,20,0"/>
-                <TextBlock Text="Description:" VerticalAlignment="Center"/>
-                <TextBox x:Name="ManualDescriptionTextBox" Width="200" Margin="5,0,20,0"/>
-                <TextBlock Text="Amount:" VerticalAlignment="Center"/>
-                <TextBox x:Name="ManualAmountTextBox" Width="100" Margin="5,0,20,0"/>
-                <Button Content="Add" Click="AddManualTransaction_Click"/>
-                <Button Content="Edit" Click="EditTransaction_Click" Margin="5,0,20,0"/>
+    <Grid Background="{StaticResource PanelBackground}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Background="{StaticResource MenuBackground}"
+                BorderThickness="0,0,1,0" BorderBrush="#333333">
+            <StackPanel VerticalAlignment="Stretch">
+                <TextBlock Text="Menu" FontSize="22" FontWeight="Bold" Margin="20,20,10,10" Foreground="{StaticResource LightText}"/>
+                <Button Content="👤 My Account" Style="{StaticResource MenuButtonStyle}" Click="MyAccount_Click"/>
+                <Button Content="✈ Trips" Style="{StaticResource MenuButtonStyle}" Click="Trips_Click"/>
+                <Button Content="💵 Finance" Style="{StaticResource MenuButtonStyle}" Click="Finance_Click"/>
+                <Button Content="💳 My Documents" Style="{StaticResource MenuButtonStyle}" Click="Documents_Click"/>
+                <Button Content="📊 Dashboarding" Style="{StaticResource MenuButtonStyle}" Click="Dashboarding_Click"/>
+                <Border Height="1" Background="#555555" Margin="10,10"/>
+                <Button Content="⚙ Settings" Style="{StaticResource MenuButtonStyle}" Click="Settings_Click"/>
+                <Button Content="🔙 Log out" Style="{StaticResource MenuButtonStyle}" Click="Logout_Click"/>
             </StackPanel>
+        </Border>
 
-            <Button Content="Fetch Transactions" Click="FetchTransactions_Click"/>
-            
-        </StackPanel>
+        <Border Grid.Column="1" Background="{StaticResource PanelBackground}" Margin="30">
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="2" Direction="270" Color="#CCCCCC" Opacity="0.5" BlurRadius="10"/>
+            </Border.Effect>
+            <ScrollViewer>
+                <StackPanel Margin="30">
+
+
+                    <Button Content="Back to Home" Click="BackToHome_Click"
+                            Style="{StaticResource SquareButtonStyle}"
+                            HorizontalAlignment="Left" Width="150" Margin="0,0,0,25"/>
+
+                    <TextBlock Text="Bank Transactions" FontSize="28" FontWeight="ExtraBold" Margin="0,0,0,25" Foreground="{StaticResource DarkText}"/>
+
+                    <Border Background="White" BorderThickness="0" CornerRadius="5" Padding="15" Margin="0,0,0,20">
+                        <Border.Effect>
+                            <DropShadowEffect ShadowDepth="1" Direction="270" Color="#DDDDDD" Opacity="0.4" BlurRadius="5"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <TextBlock Text="Select Trip:" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="{StaticResource DarkText}"/>
+                                <ComboBox x:Name="TripComboBox" Style="{StaticResource {x:Type ComboBox}}"
+                                          Width="200" Margin="0,0,20,0"
+                                          DisplayMemberPath="Destination"
+                                          SelectedValuePath="TripId"
+                                          SelectionChanged="TripComboBox_SelectionChanged"/>
+
+                                <TextBlock Text="Select Account:" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="{StaticResource DarkText}"/>
+                                <ComboBox x:Name="AccountComboBox" Style="{StaticResource {x:Type ComboBox}}" Width="200" Margin="0,0,20,0" />
+
+                                <Button Content="Fetch Transactions" Click="FetchTransactions_Click" Style="{StaticResource SquareButtonStyle}" Width="150"/>
+                            </StackPanel>
+
+                            <ListView x:Name="TransactionsListView" Margin="0,0,0,10" SelectionChanged="TransactionsListView_SelectionChanged">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" Width="100"/>
+                                        <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="300"/>
+                                        <GridViewColumn Header="Amount" DisplayMemberBinding="{Binding Amount}" Width="100"/>
+                                        <GridViewColumn Header="Actions" Width="100">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Button Content="Delete"
+                                                            Background="{StaticResource RedAccent}"
+                                                            Foreground="{StaticResource LightText}"
+                                                            Style="{StaticResource SquareButtonStyle}"
+                                                            Click="DeleteTransaction_Click"
+                                                            Tag="{Binding Description}"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Background="White" BorderThickness="0" CornerRadius="5" Padding="15" Margin="0,10,0,0">
+                        <Border.Effect>
+                            <DropShadowEffect ShadowDepth="1" Direction="270" Color="#DDDDDD" Opacity="0.4" BlurRadius="5"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="Manually Add Transaction" FontWeight="Bold" Margin="0,0,0,10" Foreground="{StaticResource DarkText}"/>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                <TextBlock Text="Date:" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="{StaticResource DarkText}"/>
+                                <DatePicker x:Name="ManualDatePicker" Style="{StaticResource {x:Type DatePicker}}" Width="150" Margin="0,0,20,0"/>
+                                <TextBlock Text="Description:" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="{StaticResource DarkText}"/>
+                                <TextBox x:Name="ManualDescriptionTextBox" Style="{StaticResource {x:Type TextBox}}" Width="200" Margin="0,0,20,0"/>
+                                <TextBlock Text="Amount:" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="{StaticResource DarkText}"/>
+                                <TextBox x:Name="ManualAmountTextBox" Style="{StaticResource {x:Type TextBox}}" Width="100" Margin="0,0,20,0"/>
+                                <Button Content="Add" Click="AddManualTransaction_Click" Style="{StaticResource SquareButtonStyle}" Width="80"/>
+                                <Button Content="Edit" Click="EditTransaction_Click" Style="{StaticResource SquareButtonStyle}" Width="80" Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
     </Grid>
 </Window>
