@@ -141,14 +141,6 @@
             </Border.Effect>
             <ScrollViewer>
                 <StackPanel Margin="30">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,20">
-                        <Ellipse Width="30" Height="30">
-                            <Ellipse.Fill>
-                                <ImageBrush x:Name="HeaderProfileImage" ImageSource="pack://application:,,,/Views/Profile_picture.jpeg"/>
-                            </Ellipse.Fill>
-                        </Ellipse>
-                        <TextBlock x:Name="HeaderUserNameTextBlock" Text="User Name" Margin="10,0,0,0" VerticalAlignment="Center" FontWeight="Bold" Foreground="{StaticResource DarkText}"/>
-                    </StackPanel>
 
                     <Button Content="🏠 Back to Home" Click="BackToHome_Click"
                             Style="{StaticResource SquareButtonStyle}"

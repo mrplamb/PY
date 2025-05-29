@@ -83,26 +83,6 @@ namespace Final
             }
         }
 
-        private void OrderIdTextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            // Clear placeholder text when the textbox is focused
-            if (OrderIdTextBox.Text.StartsWith("Paste Order ID"))
-            {
-                OrderIdTextBox.Text = "";
-            }
-        }
-
-        private void PasteOrderId_Click(object sender, RoutedEventArgs e)
-        {
-            if (Clipboard.ContainsText())
-            {
-                OrderIdTextBox.Text = Clipboard.GetText().Trim();
-            }
-            else
-            {
-                MessageBox.Show("Clipboard is empty or does not contain text.", "Clipboard", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-        }
 
         private void LoadTrips()
         {

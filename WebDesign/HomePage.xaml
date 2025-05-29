@@ -141,15 +141,7 @@
             </Border.Effect>
             <ScrollViewer>
                 <StackPanel Margin="30">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Ellipse Width="30" Height="30">
-                            <Ellipse.Fill>
-                                <ImageBrush x:Name="HeaderProfileImage" ImageSource="pack://application:,,,/Final;component/Views/Profile_picture.jpeg"/>
-                            </Ellipse.Fill>
-                        </Ellipse>
-                        <TextBlock x:Name="HeaderUserNameTextBlock" Text="Yasmine Bouanane" Margin="10,0,0,0" VerticalAlignment="Center" FontWeight="Bold"/>
-                    </StackPanel>
-
+                    
                     <TextBlock Text="Welcome!" FontSize="28" FontWeight="ExtraBold" Margin="0,0,0,25" Foreground="{StaticResource DarkText}"/>
                     <Border Background="White" BorderThickness="0" CornerRadius="5" Height="350">
                         <Border.Effect>
@@ -174,7 +166,7 @@
                         <StackPanel>
                             <TextBlock Text="About Us" FontSize="20" FontWeight="Bold" Margin="0,0,0,15" Foreground="{StaticResource DarkText}"/>
                             <TextBlock TextWrapping="Wrap" FontSize="14" Foreground="{StaticResource DarkText}">
-                                At HolidayManager, we believe that planning time off should be simple, stress-free, and meaningful. Our platform is designed to help individuals and teams organize their holidays, manage leave requests, track trips, and handle personal travel documents — all in one place.
+                                At PY Travels, we believe that planning time off should be simple, stress-free, and meaningful. Our platform is designed to help individuals and teams organize their holidays, track trips, and handle personal travel documents — all in one place.
                             </TextBlock>
                         </StackPanel>
                     </Border>
@@ -183,9 +175,6 @@
             </ScrollViewer>
         </Border>
 
-        <Border Background="{StaticResource AccentBlue}" Width="50" Height="50" CornerRadius="5"
-                HorizontalAlignment="Right" VerticalAlignment="Top" Margin="15">
-            <Image Source="Views/App_logo.png" Stretch="Uniform"/>
-        </Border>
+        
     </Grid>
 </Window>

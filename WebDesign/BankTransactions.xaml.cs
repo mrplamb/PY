@@ -147,7 +147,7 @@ namespace Final
             }
             if (CategoryComboBox.SelectedItem is not string selectedCategory) 
             {
-                MessageBox.Show("Please select a category for the manual transaction.");
+                MessageBox.Show("Please select a category for the transaction.");
                 return;
             }
 
@@ -180,7 +180,7 @@ namespace Final
                 Category = manualTransaction.Category 
             });
 
-            MessageBox.Show("Manual transaction added!");
+            
             LoadCategoriesFromTransactions(); 
             ClearManualInputFields(); 
         }

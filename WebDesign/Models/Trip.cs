@@ -21,7 +21,7 @@ namespace HolidayManagerWeb.Models
         public DateOnly EndDate { get; set; }
 
         public decimal Budget { get; set; }
-        public string Status { get; set; } = "Planned"; 
+        public string Status { get; set; } = "Planned";
 
         public ICollection<Document> Documents { get; set; } = new List<Document>();
 
@@ -43,6 +43,13 @@ namespace HolidayManagerWeb.Models
         public decimal Amount { get; set; }
 
         public string Category { get; set; }
+
+        public string DatesRange => $"{StartDate.ToShortDateString()} - {EndDate.ToShortDateString()}";
+
+        public decimal TotalSpent { get; set; } // Will be calculated dynamically
+        public string TotalSpentFormatted => TotalSpent.ToString("C2");
+        public string BudgetFormatted => Budget.ToString("C2");
+        public string BudgetVsActualDisplay { get; set; }
     }
 }
 
